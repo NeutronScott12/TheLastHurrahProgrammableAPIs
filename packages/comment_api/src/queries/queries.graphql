@@ -1,0 +1,63 @@
+fragment CommentFragment on CommentModel {
+    application_id
+    author {
+        username
+        id
+    }
+    plain_text_body
+    json_body
+    id
+    thread_id
+    created_at
+    updated_at
+    user_id
+    parent_id
+    pending
+    edited
+    approved
+    reply_notification
+    _count {
+        down_vote
+        replies
+        up_vote
+    }
+    replied_to_user {
+        username
+    }
+}
+
+query FetchComments {
+    fetch_comments {
+        comments {
+            ...CommentFragment
+        }
+    }
+}
+
+input FetchCommentByThreadIdInput {
+    limit: Int!
+    skip: Int!
+    thread_id: String!
+    sort: SORT!
+    application_short_name: String!
+}
+
+query FetchCommentByThreadId(
+    $fetchCommentByThreadIdInput: FetchCommentByThreadIdInput!
+) {
+    fetch_comments_by_thread_id(
+        fetchCommentByThreadIdInput: $fetchCommentByThreadIdInput
+    ) {
+        comments_count
+        comments {
+            ...CommentFragment
+            replies {
+                ...CommentFragment
+                parent_id
+                replies {
+                    ...CommentFragment
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,20 @@
+{
+    "name": "the-last-hurrah-programmable-apis",
+    "version": "1.0.0",
+    "main": "index.js",
+    "license": "MIT",
+    "private": true,
+    "dependencies": {
+        "glob": "^7.2.0",
+        "lerna": "^4.0.0",
+        "rimraf": "^3.0.2"
+    },
+    "workspaces": {
+        "packages": [
+            "packages/*"
+        ],
+        "nohoist": [
+            "@graphql-codegen/**"
+        ]
+    }
+}

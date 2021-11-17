@@ -1,0 +1,18 @@
+input CreateCommentInput {
+    plain_text_body: String!
+    json_body: Object!
+    application_id: String!
+    thread_id: String!
+}
+
+mutation CreateThreadComent($createCommentInput: CreateCommentInput!) {
+    create_comment(CreateCommentInput: $createCommentInput) {
+        ...CommentFragment
+        replies {
+            ...CommentFragment
+            replies {
+                ...CommentFragment
+            }
+        }
+    }
+}
