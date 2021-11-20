@@ -67,6 +67,7 @@ export type ApplicationModel = {
   renewal?: Maybe<Scalars['DateTime']>;
   short_name: Scalars['String'];
   theme: Theme;
+  thread_ids: Array<Scalars['String']>;
   threads: Array<ThreadModel>;
   updated_at: Scalars['DateTime'];
   website_url?: Maybe<Scalars['String']>;
@@ -1028,6 +1029,41 @@ export type CreateThreadComentMutationVariables = Exact<{
 
 export type CreateThreadComentMutation = { __typename?: 'Mutation', create_comment: { __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined }>, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined }>, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined } };
 
+export type EditThreadCommentMutationVariables = Exact<{
+  UpdateCommentInput: UpdateCommentInput;
+}>;
+
+
+export type EditThreadCommentMutation = { __typename?: 'Mutation', update_comment: { __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined }>, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined }>, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined } };
+
+export type DeleteThreadCommentMutationVariables = Exact<{
+  commentId: Scalars['String'];
+}>;
+
+
+export type DeleteThreadCommentMutation = { __typename?: 'Mutation', delete_comment: { __typename?: 'StandardResponseModel', success: boolean, message: string } };
+
+export type CreateReplyCommentMutationVariables = Exact<{
+  CreateReplyCommentInput: CreateReplyCommentInput;
+}>;
+
+
+export type CreateReplyCommentMutation = { __typename?: 'Mutation', create_reply_comment: { __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined }>, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined }>, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined } };
+
+export type UpVoteCommentMutationVariables = Exact<{
+  comment_id: Scalars['String'];
+}>;
+
+
+export type UpVoteCommentMutation = { __typename?: 'Mutation', up_vote_comment: { __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined }>, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined }>, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined } };
+
+export type DownVoteCommentMutationVariables = Exact<{
+  comment_id: Scalars['String'];
+}>;
+
+
+export type DownVoteCommentMutation = { __typename?: 'Mutation', down_vote_comment: { __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined }>, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined }>, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined } };
+
 export type CommentFragmentFragment = { __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined };
 
 export type FetchCommentsQueryVariables = Exact<{ [key: string]: never; }>;
@@ -1110,6 +1146,196 @@ export function useCreateThreadComentMutation(baseOptions?: Apollo.MutationHookO
 export type CreateThreadComentMutationHookResult = ReturnType<typeof useCreateThreadComentMutation>;
 export type CreateThreadComentMutationResult = Apollo.MutationResult<CreateThreadComentMutation>;
 export type CreateThreadComentMutationOptions = Apollo.BaseMutationOptions<CreateThreadComentMutation, CreateThreadComentMutationVariables>;
+export const EditThreadCommentDocument = gql`
+    mutation EditThreadComment($UpdateCommentInput: UpdateCommentInput!) {
+  update_comment(UpdateCommentInput: $UpdateCommentInput) {
+    ...CommentFragment
+    replies {
+      ...CommentFragment
+      replies {
+        ...CommentFragment
+      }
+    }
+  }
+}
+    ${CommentFragmentFragmentDoc}`;
+export type EditThreadCommentMutationFn = Apollo.MutationFunction<EditThreadCommentMutation, EditThreadCommentMutationVariables>;
+
+/**
+ * __useEditThreadCommentMutation__
+ *
+ * To run a mutation, you first call `useEditThreadCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditThreadCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editThreadCommentMutation, { data, loading, error }] = useEditThreadCommentMutation({
+ *   variables: {
+ *      UpdateCommentInput: // value for 'UpdateCommentInput'
+ *   },
+ * });
+ */
+export function useEditThreadCommentMutation(baseOptions?: Apollo.MutationHookOptions<EditThreadCommentMutation, EditThreadCommentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditThreadCommentMutation, EditThreadCommentMutationVariables>(EditThreadCommentDocument, options);
+      }
+export type EditThreadCommentMutationHookResult = ReturnType<typeof useEditThreadCommentMutation>;
+export type EditThreadCommentMutationResult = Apollo.MutationResult<EditThreadCommentMutation>;
+export type EditThreadCommentMutationOptions = Apollo.BaseMutationOptions<EditThreadCommentMutation, EditThreadCommentMutationVariables>;
+export const DeleteThreadCommentDocument = gql`
+    mutation DeleteThreadComment($commentId: String!) {
+  delete_comment(commentId: $commentId) {
+    success
+    message
+  }
+}
+    `;
+export type DeleteThreadCommentMutationFn = Apollo.MutationFunction<DeleteThreadCommentMutation, DeleteThreadCommentMutationVariables>;
+
+/**
+ * __useDeleteThreadCommentMutation__
+ *
+ * To run a mutation, you first call `useDeleteThreadCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteThreadCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteThreadCommentMutation, { data, loading, error }] = useDeleteThreadCommentMutation({
+ *   variables: {
+ *      commentId: // value for 'commentId'
+ *   },
+ * });
+ */
+export function useDeleteThreadCommentMutation(baseOptions?: Apollo.MutationHookOptions<DeleteThreadCommentMutation, DeleteThreadCommentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteThreadCommentMutation, DeleteThreadCommentMutationVariables>(DeleteThreadCommentDocument, options);
+      }
+export type DeleteThreadCommentMutationHookResult = ReturnType<typeof useDeleteThreadCommentMutation>;
+export type DeleteThreadCommentMutationResult = Apollo.MutationResult<DeleteThreadCommentMutation>;
+export type DeleteThreadCommentMutationOptions = Apollo.BaseMutationOptions<DeleteThreadCommentMutation, DeleteThreadCommentMutationVariables>;
+export const CreateReplyCommentDocument = gql`
+    mutation CreateReplyComment($CreateReplyCommentInput: CreateReplyCommentInput!) {
+  create_reply_comment(CreateReplyCommentInput: $CreateReplyCommentInput) {
+    ...CommentFragment
+    replies {
+      ...CommentFragment
+      replies {
+        ...CommentFragment
+      }
+    }
+  }
+}
+    ${CommentFragmentFragmentDoc}`;
+export type CreateReplyCommentMutationFn = Apollo.MutationFunction<CreateReplyCommentMutation, CreateReplyCommentMutationVariables>;
+
+/**
+ * __useCreateReplyCommentMutation__
+ *
+ * To run a mutation, you first call `useCreateReplyCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateReplyCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createReplyCommentMutation, { data, loading, error }] = useCreateReplyCommentMutation({
+ *   variables: {
+ *      CreateReplyCommentInput: // value for 'CreateReplyCommentInput'
+ *   },
+ * });
+ */
+export function useCreateReplyCommentMutation(baseOptions?: Apollo.MutationHookOptions<CreateReplyCommentMutation, CreateReplyCommentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateReplyCommentMutation, CreateReplyCommentMutationVariables>(CreateReplyCommentDocument, options);
+      }
+export type CreateReplyCommentMutationHookResult = ReturnType<typeof useCreateReplyCommentMutation>;
+export type CreateReplyCommentMutationResult = Apollo.MutationResult<CreateReplyCommentMutation>;
+export type CreateReplyCommentMutationOptions = Apollo.BaseMutationOptions<CreateReplyCommentMutation, CreateReplyCommentMutationVariables>;
+export const UpVoteCommentDocument = gql`
+    mutation UpVoteComment($comment_id: String!) {
+  up_vote_comment(comment_id: $comment_id) {
+    ...CommentFragment
+    replies {
+      ...CommentFragment
+      replies {
+        ...CommentFragment
+      }
+    }
+  }
+}
+    ${CommentFragmentFragmentDoc}`;
+export type UpVoteCommentMutationFn = Apollo.MutationFunction<UpVoteCommentMutation, UpVoteCommentMutationVariables>;
+
+/**
+ * __useUpVoteCommentMutation__
+ *
+ * To run a mutation, you first call `useUpVoteCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpVoteCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [upVoteCommentMutation, { data, loading, error }] = useUpVoteCommentMutation({
+ *   variables: {
+ *      comment_id: // value for 'comment_id'
+ *   },
+ * });
+ */
+export function useUpVoteCommentMutation(baseOptions?: Apollo.MutationHookOptions<UpVoteCommentMutation, UpVoteCommentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpVoteCommentMutation, UpVoteCommentMutationVariables>(UpVoteCommentDocument, options);
+      }
+export type UpVoteCommentMutationHookResult = ReturnType<typeof useUpVoteCommentMutation>;
+export type UpVoteCommentMutationResult = Apollo.MutationResult<UpVoteCommentMutation>;
+export type UpVoteCommentMutationOptions = Apollo.BaseMutationOptions<UpVoteCommentMutation, UpVoteCommentMutationVariables>;
+export const DownVoteCommentDocument = gql`
+    mutation DownVoteComment($comment_id: String!) {
+  down_vote_comment(comment_id: $comment_id) {
+    ...CommentFragment
+    replies {
+      ...CommentFragment
+      replies {
+        ...CommentFragment
+      }
+    }
+  }
+}
+    ${CommentFragmentFragmentDoc}`;
+export type DownVoteCommentMutationFn = Apollo.MutationFunction<DownVoteCommentMutation, DownVoteCommentMutationVariables>;
+
+/**
+ * __useDownVoteCommentMutation__
+ *
+ * To run a mutation, you first call `useDownVoteCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDownVoteCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [downVoteCommentMutation, { data, loading, error }] = useDownVoteCommentMutation({
+ *   variables: {
+ *      comment_id: // value for 'comment_id'
+ *   },
+ * });
+ */
+export function useDownVoteCommentMutation(baseOptions?: Apollo.MutationHookOptions<DownVoteCommentMutation, DownVoteCommentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DownVoteCommentMutation, DownVoteCommentMutationVariables>(DownVoteCommentDocument, options);
+      }
+export type DownVoteCommentMutationHookResult = ReturnType<typeof useDownVoteCommentMutation>;
+export type DownVoteCommentMutationResult = Apollo.MutationResult<DownVoteCommentMutation>;
+export type DownVoteCommentMutationOptions = Apollo.BaseMutationOptions<DownVoteCommentMutation, DownVoteCommentMutationVariables>;
 export const FetchCommentsDocument = gql`
     query FetchComments {
   fetch_comments {
@@ -1193,7 +1419,7 @@ export function useFetchCommentByThreadIdLazyQuery(baseOptions?: Apollo.LazyQuer
 export type FetchCommentByThreadIdQueryHookResult = ReturnType<typeof useFetchCommentByThreadIdQuery>;
 export type FetchCommentByThreadIdLazyQueryHookResult = ReturnType<typeof useFetchCommentByThreadIdLazyQuery>;
 export type FetchCommentByThreadIdQueryResult = Apollo.QueryResult<FetchCommentByThreadIdQuery, FetchCommentByThreadIdQueryVariables>;
-export type ApplicationModelKeySpecifier = ('adult_content' | 'allow_images_and_videos_on_comments' | 'application_name' | 'application_owner' | 'application_owner_id' | 'auth_secret' | 'authenticated_users' | 'authenticated_users_ids' | 'category' | 'comment_policy_summary' | 'comment_policy_url' | 'commenters_users_ids' | 'comments' | 'cost' | 'created_at' | 'default_avatar_url' | 'description' | 'display_comments_when_flagged' | 'email_mods_when_comments_flagged' | 'id' | 'language' | 'links_in_comments' | 'moderators' | 'moderators_ids' | 'plan' | 'pre_comment_moderation' | 'renewal' | 'short_name' | 'theme' | 'threads' | 'updated_at' | 'website_url' | ApplicationModelKeySpecifier)[];
+export type ApplicationModelKeySpecifier = ('adult_content' | 'allow_images_and_videos_on_comments' | 'application_name' | 'application_owner' | 'application_owner_id' | 'auth_secret' | 'authenticated_users' | 'authenticated_users_ids' | 'category' | 'comment_policy_summary' | 'comment_policy_url' | 'commenters_users_ids' | 'comments' | 'cost' | 'created_at' | 'default_avatar_url' | 'description' | 'display_comments_when_flagged' | 'email_mods_when_comments_flagged' | 'id' | 'language' | 'links_in_comments' | 'moderators' | 'moderators_ids' | 'plan' | 'pre_comment_moderation' | 'renewal' | 'short_name' | 'theme' | 'thread_ids' | 'threads' | 'updated_at' | 'website_url' | ApplicationModelKeySpecifier)[];
 export type ApplicationModelFieldPolicy = {
 	adult_content?: FieldPolicy<any> | FieldReadFunction<any>,
 	allow_images_and_videos_on_comments?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -1224,6 +1450,7 @@ export type ApplicationModelFieldPolicy = {
 	renewal?: FieldPolicy<any> | FieldReadFunction<any>,
 	short_name?: FieldPolicy<any> | FieldReadFunction<any>,
 	theme?: FieldPolicy<any> | FieldReadFunction<any>,
+	thread_ids?: FieldPolicy<any> | FieldReadFunction<any>,
 	threads?: FieldPolicy<any> | FieldReadFunction<any>,
 	updated_at?: FieldPolicy<any> | FieldReadFunction<any>,
 	website_url?: FieldPolicy<any> | FieldReadFunction<any>
