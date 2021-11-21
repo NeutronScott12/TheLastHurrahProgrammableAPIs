@@ -78,3 +78,10 @@ mutation TwoFactorLogin($twoFactorInput: TwoFactorInput!) {
         }
     }
 }
+
+mutation DeleteUser($email: String!) {
+    delete_user(email: $email) {
+        success
+        message
+    }
+}

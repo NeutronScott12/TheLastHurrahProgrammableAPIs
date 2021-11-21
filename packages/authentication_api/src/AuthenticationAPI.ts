@@ -7,11 +7,12 @@ import fetch from 'cross-fetch'
 import { getMainDefinition } from '@apollo/client/utilities'
 import { WebSocketLink } from '@apollo/client/link/ws'
 import { isBrowser } from 'browser-or-node'
+import ws from 'ws'
 
 import { AuthenticationQueries } from './queries '
 
 export class AuthenticationAPI {
-    private client: ApolloClient<NormalizedCacheObject>
+    public client: ApolloClient<NormalizedCacheObject>
     cache: InMemoryCache
     application_short_name: string
     queries: AuthenticationQueries
@@ -59,38 +60,39 @@ export class AuthenticationAPI {
             }
         })
 
-        const subUri =
-            process.env.NODE_ENV === 'production'
-                ? 'wss://lasthurrah.co.uk/ws-graphql'
-                : 'ws://localhost:4003/graphql'
+        // const subUri =
+        //     process.env.NODE_ENV === 'production'
+        //         ? 'wss://lasthurrah.co.uk/ws-graphql'
+        //         : 'ws://localhost:4003/graphql'
 
-        const wsLink = new WebSocketLink({
-            uri: subUri,
-            options: {
-                reconnect: true,
-                connectionParams: {
-                    Authorization: `Bearer ${token}`,
-                },
-            },
-        })
+        // const wsLink = new WebSocketLink({
+        //     webSocketImpl: ws,
+        //     uri: subUri,
+        //     options: {
+        //         reconnect: true,
+        //         connectionParams: {
+        //             Authorization: `Bearer ${token}`,
+        //         },
+        //     },
+        // })
 
         const authHttpLink = authLink.concat(httpLink)
 
-        const splitLink = split(
-            ({ query }) => {
-                const definition = getMainDefinition(query)
-                return (
-                    definition.kind === 'OperationDefinition' &&
-                    definition.operation === 'subscription'
-                )
-            },
-            wsLink,
-            authHttpLink,
-        )
+        // const splitLink = split(
+        //     ({ query }) => {
+        //         const definition = getMainDefinition(query)
+        //         return (
+        //             definition.kind === 'OperationDefinition' &&
+        //             definition.operation === 'subscription'
+        //         )
+        //     },
+        //     wsLink,
+        //     authHttpLink,
+        // )
 
         this.client = new ApolloClient({
-            link: splitLink,
-            cache,
+            link: authHttpLink,
+            cache: this.cache,
         })
     }
 

@@ -7,9 +7,9 @@ export interface IRegisterArgs {
     email: string
     password: string
     username: string
-    application_id: string
-    redirect_url: string
-    two_factor_authentication: boolean
+    application_id?: string
+    redirect_url?: string
+    two_factor_authentication?: boolean
 }
 
 export interface ITwoFactorLogin {
@@ -20,4 +20,8 @@ export interface ITwoFactorLogin {
 export interface IForgotPasswordArgs {
     email: string
     redirect_url: string
+}
+
+export interface IDeleteUserArgs {
+    email: string
 }

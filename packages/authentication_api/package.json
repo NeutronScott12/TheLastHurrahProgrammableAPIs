@@ -1,11 +1,11 @@
 {
     "name": "authentication_api",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "main": "index.js",
     "license": "MIT",
     "scripts": {
         "graphql-codegen": "graphql-codegen --config codegen.yml",
-        "test": "jest"
+        "test": "jest --runInBand"
     },
     "dependencies": {
         "@apollo/client": "^3.4.17",
@@ -18,7 +18,9 @@
         "immutable": "^4.0.0",
         "ramda": "^0.27.1",
         "react": "^17.0.2",
-        "rimraf": "^3.0.2"
+        "rimraf": "^3.0.2",
+        "subscriptions-transport-ws": "^0.11.0",
+        "ws": "^8.2.3"
     },
     "devDependencies": {
         "@babel/preset-env": "^7.16.4",
@@ -31,10 +33,13 @@
         "@graphql-codegen/typescript-react-apollo": "3.2.2",
         "@parcel/packager-ts": "^2.0.1",
         "@parcel/transformer-typescript-types": "^2.0.1",
+        "@types/faker": "^5.5.9",
         "@types/jest": "^27.0.3",
         "@types/ramda": "^0.27.50",
+        "faker": "^5.5.3",
         "jest": "^27.3.1",
         "parcel": "^2.0.1",
+        "ts-jest": "^27.0.7",
         "ts-node": "^10.4.0",
         "ts-node-dev": "^1.1.8"
     },

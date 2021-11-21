@@ -1,14 +1,18 @@
 import {
     ApolloClient,
+    ApolloError,
     InMemoryCache,
     NormalizedCacheObject,
 } from '@apollo/client/core'
 import { AuthenticationAPIErrors } from '../helpers/errors'
 import { IAuthenticationAPI } from '../types'
+import { delete_user } from './services/delete_user'
 import { forgot_password } from './services/forgot_password'
 import { login } from './services/login'
 import { regsiter } from './services/register'
+import { two_factor_login } from './services/two_factor_login'
 import {
+    IDeleteUserArgs,
     IForgotPasswordArgs,
     ILoginArgs,
     IRegisterArgs,
@@ -28,7 +32,7 @@ export class AuthenticationMutations {
         try {
             return login(args, { ...this })
         } catch (error) {
-            return error as AuthenticationAPIErrors
+            throw new ApolloError({})
         }
     }
 
@@ -36,12 +40,13 @@ export class AuthenticationMutations {
         try {
             return regsiter(args, { ...this })
         } catch (error) {
-            return error as AuthenticationAPIErrors
+            throw new ApolloError({})
         }
     }
 
     public async two_factor_loing(args: ITwoFactorLogin) {
         try {
+            return two_factor_login(args, { ...this })
         } catch (error) {
             return error as AuthenticationAPIErrors
         }
@@ -51,7 +56,15 @@ export class AuthenticationMutations {
         try {
             return forgot_password(args, { ...this })
         } catch (error) {
-            return error as AuthenticationAPIErrors
+            throw new ApolloError({})
+        }
+    }
+
+    public async delete_user(args: IDeleteUserArgs) {
+        try {
+            return delete_user(args, { ...this })
+        } catch (error) {
+            throw new ApolloError({})
         }
     }
 }

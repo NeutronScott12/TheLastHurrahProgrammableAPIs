@@ -1,4 +1,8 @@
-import { ApolloClient, NormalizedCacheObject } from '@apollo/client/core'
+import {
+    ApolloClient,
+    ApolloError,
+    NormalizedCacheObject,
+} from '@apollo/client/core'
 import { CurrentUserDocument, CurrentUserQuery } from '../generated/graphql'
 import { AuthenticationAPIErrors } from '../helpers/errors'
 
@@ -11,11 +15,13 @@ export class AuthenticationQueries {
 
     public async currentUser() {
         try {
-            return this.client.query<CurrentUserQuery>({
+            const result = await this.client.query<CurrentUserQuery>({
                 query: CurrentUserDocument,
             })
+
+            return result
         } catch (error) {
-            return error as AuthenticationAPIErrors
+            throw new ApolloError({})
         }
     }
 }
