@@ -1,0 +1,80 @@
+input RegistrationInput {
+    username: String!
+    email: String!
+    password: String!
+    application_id: String
+    redirect_url: String
+    two_factor_authentication: Boolean
+}
+
+mutation Registration($registrationInput: RegistrationInput!) {
+    register_user(registrationInput: $registrationInput) {
+        success
+        message
+    }
+}
+
+input LoginInput {
+    username: String!
+    email: String!
+}
+
+fragment LoginResponseFragment on LoginResponse {
+    success
+    message
+    token
+    refresh_token
+    two_factor_authentication
+    user {
+        username
+        id
+    }
+}
+
+fragment TwoFactorLoginResponseFragment on TwoFactorLoginResponse {
+    success
+    message
+    two_factor_authentication
+}
+
+mutation Login($loginInput: LoginInput!) {
+    login_user(loginInput: $loginInput) {
+        ... on LoginResponse {
+            ...LoginResponseFragment
+        }
+        ... on TwoFactorLoginResponse {
+            ...TwoFactorLoginResponseFragment
+        }
+    }
+}
+
+input ForgotPasswordInput {
+    email: String!
+    redirect_url: String
+}
+
+mutation ForgotPassword($forgotPasswordInput: ForgotPasswordInput!) {
+    forgot_password(forgotPasswordInput: $forgotPasswordInput) {
+        success
+        message
+    }
+}
+
+input TwoFactorInput {
+    two_factor_id: String!
+    email: String!
+}
+
+mutation TwoFactorLogin($twoFactorInput: TwoFactorInput!) {
+    two_factor_login(twoFactorInput: $twoFactorInput) {
+        success
+        message
+        token
+        refresh_token
+        two_factor_authentication
+        user {
+            username
+            id
+        }
+    }
+}
