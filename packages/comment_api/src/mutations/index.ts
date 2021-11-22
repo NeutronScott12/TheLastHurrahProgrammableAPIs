@@ -1,15 +1,18 @@
 import {
     ApolloClient,
+    ApolloError,
     InMemoryCache,
     NormalizedCacheObject,
 } from '@apollo/client'
 
 import {
     CreateCommentInput,
+    CreateReplyCommentInput,
     DownVoteCommentDocument,
     DownVoteCommentMutation,
     DownVoteCommentMutationVariables,
     Sort,
+    UpdateCommentInput,
     UpVoteCommentDocument,
     UpVoteCommentMutation,
     UpVoteCommentMutationVariables,
@@ -20,11 +23,13 @@ import { createReplyComment } from './services/createReplyComment'
 import { deleteComment } from './services/deleteComment'
 import { deleteReplyComment } from './services/deleteReplyComment'
 import { editComment } from './services/editComment'
+import { findOneOrCreateOneThread } from './services/findOneOrCreateOneThread'
 import {
     ICommentAPI,
     IDeleteCommentArgs,
     IDeleteReplyCommentArgs,
     IEditCommentArgs,
+    IFindOrCreateOneThreadInputArgs,
     IReplyCommentArgs,
 } from './types'
 
@@ -44,8 +49,9 @@ export class CommentMutations {
         sort,
         application_short_name,
     }: ICommentAPI) {
-        this.client = client
         this.cache = cache
+
+        this.client = client
         this.limit = limit
         this.skip = skip
         this.sort = sort
@@ -61,11 +67,11 @@ export class CommentMutations {
 
             return createComment(args, { ...self })
         } catch (error) {
-            return error
+            throw new ApolloError({})
         }
     }
 
-    public async createReplyComment(args: IReplyCommentArgs) {
+    public async createReplyComment(args: CreateReplyCommentInput) {
         try {
             const self = this
             if (!args) {
@@ -74,7 +80,7 @@ export class CommentMutations {
 
             return createReplyComment(args, { ...self })
         } catch (error) {
-            return error
+            throw new ApolloError({})
         }
     }
 
@@ -100,7 +106,7 @@ export class CommentMutations {
 
             return await deleteComment(args, { ...self })
         } catch (error) {
-            throw new Error()
+            throw new ApolloError({})
         }
     }
 
@@ -113,7 +119,7 @@ export class CommentMutations {
 
             return await deleteReplyComment(args, { ...self })
         } catch (error) {
-            throw new Error()
+            throw new ApolloError({})
         }
     }
 
@@ -152,6 +158,16 @@ export class CommentMutations {
             })
         } catch (error) {
             throw new Error()
+        }
+    }
+
+    public async findOneOrCreateOneThread(
+        args: IFindOrCreateOneThreadInputArgs,
+    ) {
+        try {
+            return findOneOrCreateOneThread(args, { ...this })
+        } catch (error) {
+            throw new ApolloError({})
         }
     }
 }

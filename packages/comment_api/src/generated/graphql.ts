@@ -1064,12 +1064,30 @@ export type DownVoteCommentMutationVariables = Exact<{
 
 export type DownVoteCommentMutation = { __typename?: 'Mutation', down_vote_comment: { __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined }>, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined }>, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined } };
 
+export type ThreadFragmentFragment = { __typename?: 'ThreadModel', id: string, application_id: string, title: string, website_url: string, poll?: { __typename?: 'PollEntity', id: string, title: string, created_at: any, updated_at: any, closed: boolean, voted: Array<string>, options: Array<{ __typename?: 'OptionEntity', id: string, option: string, votes: Array<{ __typename?: 'VoteEntity', id: string, user_id: string }> }> } | null | undefined, pinned_comment?: { __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, author: { __typename?: 'UserModel', username: string, id: string } } | null | undefined };
+
+export type PollFragmentFragment = { __typename?: 'PollEntity', id: string, title: string, created_at: any, updated_at: any, closed: boolean, voted: Array<string>, options: Array<{ __typename?: 'OptionEntity', id: string, option: string, votes: Array<{ __typename?: 'VoteEntity', id: string, user_id: string }> }> };
+
+export type FindOneOrCreateOneThreadQueryVariables = Exact<{
+  findOrCreateOneThreadInput: FindOrCreateOneThreadInput;
+}>;
+
+
+export type FindOneOrCreateOneThreadQuery = { __typename?: 'Query', find_one_thread_or_create_one: { __typename?: 'ThreadModel', id: string, application_id: string, title: string, website_url: string, poll?: { __typename?: 'PollEntity', id: string, title: string, created_at: any, updated_at: any, closed: boolean, voted: Array<string>, options: Array<{ __typename?: 'OptionEntity', id: string, option: string, votes: Array<{ __typename?: 'VoteEntity', id: string, user_id: string }> }> } | null | undefined, pinned_comment?: { __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, author: { __typename?: 'UserModel', username: string, id: string } } | null | undefined } };
+
+export type DeleteManyCommentsMutationVariables = Exact<{
+  deleteManyCommentsInput: DeleteManyCommentsInput;
+}>;
+
+
+export type DeleteManyCommentsMutation = { __typename?: 'Mutation', delete_many_comments: { __typename?: 'StandardResponseModel', success: boolean, message: string } };
+
 export type CommentFragmentFragment = { __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined };
 
 export type FetchCommentsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FetchCommentsQuery = { __typename?: 'Query', fetch_comments: { __typename?: 'FetchAllComments', comments: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined }> } };
+export type FetchCommentsQuery = { __typename?: 'Query', fetch_comments: { __typename?: 'FetchAllComments', comments_count: number, comments: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined }> } };
 
 export type FetchCommentByThreadIdQueryVariables = Exact<{
   fetchCommentByThreadIdInput: FetchCommentByThreadIdInput;
@@ -1078,6 +1096,50 @@ export type FetchCommentByThreadIdQueryVariables = Exact<{
 
 export type FetchCommentByThreadIdQuery = { __typename?: 'Query', fetch_comments_by_thread_id: { __typename?: 'FetchCommentByThreadIdResponse', comments_count: number, comments: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', parent_id?: string | null | undefined, application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined }>, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined }>, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined }> } };
 
+export const PollFragmentFragmentDoc = gql`
+    fragment PollFragment on PollEntity {
+  id
+  title
+  created_at
+  updated_at
+  closed
+  voted
+  options {
+    id
+    option
+    votes {
+      id
+      user_id
+    }
+  }
+}
+    `;
+export const ThreadFragmentFragmentDoc = gql`
+    fragment ThreadFragment on ThreadModel {
+  id
+  application_id
+  title
+  website_url
+  poll {
+    ...PollFragment
+  }
+  pinned_comment {
+    application_id
+    author {
+      username
+      id
+    }
+    plain_text_body
+    json_body
+    id
+    thread_id
+    created_at
+    updated_at
+    user_id
+    parent_id
+  }
+}
+    ${PollFragmentFragmentDoc}`;
 export const CommentFragmentFragmentDoc = gql`
     fragment CommentFragment on CommentModel {
   application_id
@@ -1336,12 +1398,84 @@ export function useDownVoteCommentMutation(baseOptions?: Apollo.MutationHookOpti
 export type DownVoteCommentMutationHookResult = ReturnType<typeof useDownVoteCommentMutation>;
 export type DownVoteCommentMutationResult = Apollo.MutationResult<DownVoteCommentMutation>;
 export type DownVoteCommentMutationOptions = Apollo.BaseMutationOptions<DownVoteCommentMutation, DownVoteCommentMutationVariables>;
+export const FindOneOrCreateOneThreadDocument = gql`
+    query FindOneOrCreateOneThread($findOrCreateOneThreadInput: FindOrCreateOneThreadInput!) {
+  find_one_thread_or_create_one(
+    findOrCreateOneThreadInput: $findOrCreateOneThreadInput
+  ) {
+    ...ThreadFragment
+  }
+}
+    ${ThreadFragmentFragmentDoc}`;
+
+/**
+ * __useFindOneOrCreateOneThreadQuery__
+ *
+ * To run a query within a React component, call `useFindOneOrCreateOneThreadQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindOneOrCreateOneThreadQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindOneOrCreateOneThreadQuery({
+ *   variables: {
+ *      findOrCreateOneThreadInput: // value for 'findOrCreateOneThreadInput'
+ *   },
+ * });
+ */
+export function useFindOneOrCreateOneThreadQuery(baseOptions: Apollo.QueryHookOptions<FindOneOrCreateOneThreadQuery, FindOneOrCreateOneThreadQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindOneOrCreateOneThreadQuery, FindOneOrCreateOneThreadQueryVariables>(FindOneOrCreateOneThreadDocument, options);
+      }
+export function useFindOneOrCreateOneThreadLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindOneOrCreateOneThreadQuery, FindOneOrCreateOneThreadQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindOneOrCreateOneThreadQuery, FindOneOrCreateOneThreadQueryVariables>(FindOneOrCreateOneThreadDocument, options);
+        }
+export type FindOneOrCreateOneThreadQueryHookResult = ReturnType<typeof useFindOneOrCreateOneThreadQuery>;
+export type FindOneOrCreateOneThreadLazyQueryHookResult = ReturnType<typeof useFindOneOrCreateOneThreadLazyQuery>;
+export type FindOneOrCreateOneThreadQueryResult = Apollo.QueryResult<FindOneOrCreateOneThreadQuery, FindOneOrCreateOneThreadQueryVariables>;
+export const DeleteManyCommentsDocument = gql`
+    mutation DeleteManyComments($deleteManyCommentsInput: DeleteManyCommentsInput!) {
+  delete_many_comments(deleteManyCommentsInput: $deleteManyCommentsInput) {
+    success
+    message
+  }
+}
+    `;
+export type DeleteManyCommentsMutationFn = Apollo.MutationFunction<DeleteManyCommentsMutation, DeleteManyCommentsMutationVariables>;
+
+/**
+ * __useDeleteManyCommentsMutation__
+ *
+ * To run a mutation, you first call `useDeleteManyCommentsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteManyCommentsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteManyCommentsMutation, { data, loading, error }] = useDeleteManyCommentsMutation({
+ *   variables: {
+ *      deleteManyCommentsInput: // value for 'deleteManyCommentsInput'
+ *   },
+ * });
+ */
+export function useDeleteManyCommentsMutation(baseOptions?: Apollo.MutationHookOptions<DeleteManyCommentsMutation, DeleteManyCommentsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteManyCommentsMutation, DeleteManyCommentsMutationVariables>(DeleteManyCommentsDocument, options);
+      }
+export type DeleteManyCommentsMutationHookResult = ReturnType<typeof useDeleteManyCommentsMutation>;
+export type DeleteManyCommentsMutationResult = Apollo.MutationResult<DeleteManyCommentsMutation>;
+export type DeleteManyCommentsMutationOptions = Apollo.BaseMutationOptions<DeleteManyCommentsMutation, DeleteManyCommentsMutationVariables>;
 export const FetchCommentsDocument = gql`
     query FetchComments {
   fetch_comments {
     comments {
       ...CommentFragment
     }
+    comments_count
   }
 }
     ${CommentFragmentFragmentDoc}`;

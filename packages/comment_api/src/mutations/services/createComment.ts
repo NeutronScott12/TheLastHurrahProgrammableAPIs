@@ -1,3 +1,4 @@
+import { ApolloError } from '@apollo/client'
 import { clone, mergeDeepRight } from 'ramda'
 import {
     CreateCommentInput,
@@ -82,6 +83,8 @@ export const createComment = async (
         })
     } catch (error) {
         console.log('ERROR', error)
-        return error as CommentAPIErrors
+        if (error instanceof ApolloError) {
+            throw new ApolloError(error)
+        }
     }
 }

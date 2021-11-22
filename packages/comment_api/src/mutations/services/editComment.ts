@@ -1,3 +1,4 @@
+import { ApolloError } from '@apollo/client'
 import {
     clone,
     findIndex,
@@ -21,7 +22,6 @@ import {
     fetchCommentByThreadIdQueryCache,
     WriteCommentByThreadIdQueryArgs,
 } from '../../helpers'
-import { CommentAPIErrors } from '../../helpers/errors'
 import { ICommentAPI, IEditCommentArgs } from '../types'
 
 export const editComment = async (
@@ -147,6 +147,9 @@ export const editComment = async (
             },
         })
     } catch (error) {
-        return error as CommentAPIErrors
+        console.log('ERROR', JSON.stringify(error, null, 2))
+        if (error instanceof ApolloError) {
+            throw new ApolloError(error)
+        }
     }
 }

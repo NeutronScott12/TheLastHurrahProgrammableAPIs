@@ -1,3 +1,4 @@
+import { ApolloError } from '@apollo/client'
 import { clone, mergeDeepRight } from 'ramda'
 import {
     DeleteThreadCommentDocument,
@@ -66,6 +67,9 @@ export const deleteComment = async (
             },
         })
     } catch (error) {
-        return error as CommentAPIErrors
+        console.log('ERROR', error)
+        if (error instanceof ApolloError) {
+            throw new ApolloError(error)
+        }
     }
 }

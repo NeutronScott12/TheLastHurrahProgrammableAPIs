@@ -88,3 +88,80 @@ mutation DownVoteComment($comment_id: String!) {
         }
     }
 }
+
+fragment ThreadFragment on ThreadModel {
+    id
+    application_id
+    title
+    website_url
+    poll {
+        ...PollFragment
+    }
+    pinned_comment {
+        application_id
+        author {
+            username
+            id
+        }
+        plain_text_body
+        json_body
+        id
+        thread_id
+        created_at
+        updated_at
+        user_id
+        parent_id
+    }
+}
+
+fragment PollFragment on PollEntity {
+    id
+    title
+    created_at
+    updated_at
+    closed
+    voted
+    options {
+        id
+        option
+        votes {
+            id
+            user_id
+        }
+    }
+}
+
+input FindOrCreateOneThreadInput {
+    application_id: String!
+    title: String!
+    website_url: String!
+}
+
+input FetchThreadCommentsById {
+    skip: Int!
+    limit: Int!
+}
+
+query FindOneOrCreateOneThread(
+    $findOrCreateOneThreadInput: FindOrCreateOneThreadInput!
+) {
+    find_one_thread_or_create_one(
+        findOrCreateOneThreadInput: $findOrCreateOneThreadInput
+    ) {
+        ...ThreadFragment
+    }
+}
+
+input DeleteManyCommentsInput {
+    comment_ids: String
+    permanent_delete: Boolean!
+}
+
+mutation DeleteManyComments(
+    $deleteManyCommentsInput: DeleteManyCommentsInput!
+) {
+    delete_many_comments(deleteManyCommentsInput: $deleteManyCommentsInput) {
+        success
+        message
+    }
+}

@@ -1,13 +1,22 @@
-import { ApolloClient, createHttpLink } from '@apollo/client/core'
+require('dotenv').config()
+
+import { ApolloClient, createHttpLink, split } from '@apollo/client/core'
 import { NormalizedCacheObject, InMemoryCache } from '@apollo/client/cache'
+import { setContext } from '@apollo/client/link/context'
 import fetch from 'cross-fetch'
+import { getMainDefinition } from '@apollo/client/utilities'
+import { WebSocketLink } from '@apollo/client/link/ws'
+import { isBrowser } from 'browser-or-node'
+import ws from 'ws'
+
 import { CommentQueries } from './queries'
 
 export class CommentAPI {
-    private client: ApolloClient<NormalizedCacheObject>
+    public client: ApolloClient<NormalizedCacheObject>
     cache: InMemoryCache
     queries: CommentQueries
     application_short_name: string
+    wsLink: WebSocketLink
 
     constructor(
         uri: string,
@@ -20,6 +29,18 @@ export class CommentAPI {
     }
 
     private generateClient(uri: string, cache: InMemoryCache) {
+        let token: string | null
+
+        if (isBrowser) {
+            token = localStorage.getItem('binary-stash-token')
+        } else {
+            token = process.env.JSON_TOKEN as string
+        }
+
+        if (!token) {
+            throw new Error('Token is required')
+        }
+
         if (!cache) {
             this.cache = new InMemoryCache({})
         } else {
@@ -31,8 +52,47 @@ export class CommentAPI {
             fetch,
         })
 
+        const authLink = setContext((_, { headers }) => {
+            return {
+                headers: {
+                    ...headers,
+                    authorization: 'token' ? `Bearer ${token}` : '',
+                },
+            }
+        })
+
+        const subUri =
+            process.env.NODE_ENV === 'production'
+                ? 'wss://lasthurrah.co.uk/ws-graphql'
+                : 'ws://localhost:4003/graphql'
+
+        this.wsLink = new WebSocketLink({
+            webSocketImpl: ws,
+            uri: subUri,
+            options: {
+                reconnect: true,
+                connectionParams: {
+                    Authorization: `Bearer ${token}`,
+                },
+            },
+        })
+
+        const authHttpLink = authLink.concat(httpLink)
+
+        const splitLink = split(
+            ({ query }) => {
+                const definition = getMainDefinition(query)
+                return (
+                    definition.kind === 'OperationDefinition' &&
+                    definition.operation === 'subscription'
+                )
+            },
+            this.wsLink,
+            authHttpLink,
+        )
+
         this.client = new ApolloClient({
-            link: httpLink,
+            link: splitLink,
             cache: this.cache,
         })
     }
@@ -47,9 +107,9 @@ const commentApi = new CommentAPI(
     'first-application',
 )
 
-commentApi.queries
-    .fetch_comemnts()
-    .then((data) => {
-        console.log('COMMENTS', JSON.stringify(data, null, 2))
-    })
-    .catch(console.error)
+// commentApi.queries
+//     .fetch_comemnts()
+//     .then((data) => {
+//         console.log('COMMENTS', JSON.stringify(data, null, 2))
+//     })
+//     .catch(console.error)

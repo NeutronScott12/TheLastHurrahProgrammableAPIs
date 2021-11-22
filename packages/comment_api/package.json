@@ -1,13 +1,12 @@
 {
     "name": "@thelasthurrah/comment_api",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "license": "MIT",
-    "type": "module",
     "scripts": {
         "graphql-codegen": "graphql-codegen --config codegen.yml",
-        "test": "jest",
+        "test": "jest --runInBand",
         "watch": "npx ts-node-dev --respawn --transpile-only src/index.ts",
         "build": "npx parcel build ./src/index.ts"
     },
@@ -17,31 +16,39 @@
         "@babel/preset-typescript": "^7.16.0",
         "@graphql-codegen/cli": "2.3.0",
         "@graphql-codegen/introspection": "2.1.0",
-        "@graphql-codegen/typescript": "2.4.0",
-        "@graphql-codegen/typescript-apollo-client-helpers": "^2.1.6",
-        "@graphql-codegen/typescript-operations": "2.2.0",
-        "@graphql-codegen/typescript-react-apollo": "3.2.1",
+        "@graphql-codegen/typescript": "2.4.1",
+        "@graphql-codegen/typescript-apollo-client-helpers": "^2.1.8",
+        "@graphql-codegen/typescript-operations": "2.2.1",
+        "@graphql-codegen/typescript-react-apollo": "3.2.2",
         "@parcel/packager-ts": "^2.0.1",
         "@parcel/transformer-typescript-types": "^2.0.1",
-        "@types/jest": "^27.0.2",
-        "@types/ramda": "^0.27.49",
+        "@types/jest": "^27.0.3",
+        "@types/ramda": "^0.27.50",
         "babel-jest": "^27.3.1",
         "jest": "^27.3.1",
         "nodemon": "^2.0.15",
         "parcel": "^2.0.1",
         "ts-node": "^10.4.0",
         "ts-node-dev": "^1.1.8",
-        "typescript": "^4.4.4"
+        "typescript": "^4.5.2"
     },
     "dependencies": {
         "@apollo/client": "^3.4.17",
+        "browser-or-node": "^2.0.0",
         "cross-env": "^7.0.3",
         "cross-fetch": "^3.1.4",
+        "dotenv": "^10.0.0",
         "graphql": "^16.0.1",
         "graphql-tag": "^2.12.6",
         "immutable": "^4.0.0",
         "ramda": "^0.27.1",
         "react": "^17.0.2",
-        "rimraf": "^3.0.2"
+        "rimraf": "^3.0.2",
+        "ws": "^8.2.3"
+    },
+    "workspaces": {
+        "nohoist": [
+            "@graphql-codegen/**"
+        ]
     }
 }

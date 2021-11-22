@@ -1,6 +1,8 @@
+import { ApolloError } from '@apollo/client'
 import { clone, mergeDeepRight } from 'ramda'
 import {
     CreateReplyCommentDocument,
+    CreateReplyCommentInput,
     CreateReplyCommentMutation,
     CreateReplyCommentMutationVariables,
 } from '../../generated/graphql'
@@ -12,7 +14,7 @@ import { CommentAPIErrors } from '../../helpers/errors'
 import { ICommentAPI, IReplyCommentArgs } from '../types'
 
 export const createReplyComment = async (
-    args: IReplyCommentArgs,
+    args: CreateReplyCommentInput,
     global: ICommentAPI,
 ) => {
     try {
@@ -50,9 +52,6 @@ export const createReplyComment = async (
                     application_short_name,
                     cache: global.cache,
                 })
-
-                console.log('RESPONSE', response)
-                console.log('DATA', data)
 
                 if (data && response?.fetch_comments_by_thread_id) {
                     const cloned = clone(response)
@@ -95,6 +94,9 @@ export const createReplyComment = async (
             },
         })
     } catch (error) {
-        return error as CommentAPIErrors
+        console.log('ERROR', error)
+        if (error instanceof ApolloError) {
+            throw new ApolloError(error)
+        }
     }
 }
