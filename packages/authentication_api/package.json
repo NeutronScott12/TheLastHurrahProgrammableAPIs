@@ -1,11 +1,15 @@
 {
-    "name": "authentication_api",
+    "name": "@thelasthurrah/programmable_authentication_api",
     "version": "0.0.1",
     "main": "index.js",
     "license": "MIT",
     "scripts": {
+        "prebuild": "npm run build:remove",
         "graphql-codegen": "graphql-codegen --config codegen.yml",
-        "test": "jest --runInBand"
+        "test": "jest --runInBand",
+        "publish": "npm publish --access=public",
+        "build:remove": "npx rimraf dist",
+        "build": "npx parcel build ./src/index.ts"
     },
     "dependencies": {
         "@apollo/client": "^3.4.17",
@@ -20,7 +24,8 @@
         "react": "^17.0.2",
         "rimraf": "^3.0.2",
         "subscriptions-transport-ws": "^0.11.0",
-        "ws": "^8.2.3"
+        "ws": "^8.2.3",
+        "yup": "^0.32.11"
     },
     "devDependencies": {
         "@babel/preset-env": "^7.16.4",
@@ -36,6 +41,7 @@
         "@types/faker": "^5.5.9",
         "@types/jest": "^27.0.3",
         "@types/ramda": "^0.27.50",
+        "@types/yup": "^0.29.13",
         "faker": "^5.5.3",
         "jest": "^27.3.1",
         "parcel": "^2.0.1",
