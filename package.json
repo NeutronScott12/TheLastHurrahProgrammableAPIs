@@ -4,6 +4,9 @@
     "main": "index.js",
     "license": "MIT",
     "private": true,
+    "scripts": {
+        "remove_all:node_modules": "npx rimraf ./**/node_modules"
+    },
     "dependencies": {
         "glob": "^7.2.0",
         "lerna": "^4.0.0",

@@ -1,14 +1,16 @@
 {
     "name": "@thelasthurrah/comment_api",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "license": "MIT",
+    "private": false,
     "scripts": {
         "graphql-codegen": "graphql-codegen --config codegen.yml",
         "test": "jest --runInBand",
         "watch": "npx ts-node-dev --respawn --transpile-only src/index.ts",
-        "build": "npx parcel build ./src/index.ts"
+        "build": "npx parcel build ./src/index.ts",
+        "publish": "npm publish --access=public"
     },
     "devDependencies": {
         "@babel/core": "^7.16.0",
