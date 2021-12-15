@@ -7,6 +7,7 @@ export interface IRegisterArgs {
     email: string
     password: string
     username: string
+    repeat_password: string
     application_id?: string
     redirect_url?: string
     two_factor_authentication?: boolean

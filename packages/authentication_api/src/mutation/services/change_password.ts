@@ -25,6 +25,7 @@ export const change_password = async (
             },
         })
     } catch (error) {
+        console.log('CHANGE_PASSWORD_ERROR', error)
         throw new Error()
     }
 }

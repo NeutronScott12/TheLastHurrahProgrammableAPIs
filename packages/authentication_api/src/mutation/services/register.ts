@@ -1,3 +1,4 @@
+import { omit } from 'ramda'
 import {
     RegistrationDocument,
     RegistrationMutation,
@@ -10,6 +11,8 @@ export const regsiter = (args: IRegisterArgs, global: IAuthenticationAPI) => {
     try {
         const { client } = global
 
+        const newArgs = omit(['repeat_password'], args)
+
         return client.mutate<
             RegistrationMutation,
             RegistrationMutationVariables
@@ -17,7 +20,7 @@ export const regsiter = (args: IRegisterArgs, global: IAuthenticationAPI) => {
             mutation: RegistrationDocument,
             variables: {
                 registrationInput: {
-                    ...args,
+                    ...newArgs,
                 },
             },
         })

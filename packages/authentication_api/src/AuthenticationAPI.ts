@@ -4,12 +4,12 @@ import { ApolloClient, createHttpLink, split } from '@apollo/client/core'
 import { NormalizedCacheObject, InMemoryCache } from '@apollo/client/cache'
 import { setContext } from '@apollo/client/link/context'
 import fetch from 'cross-fetch'
-import { getMainDefinition } from '@apollo/client/utilities'
-import { WebSocketLink } from '@apollo/client/link/ws'
+// import { getMainDefinition } from '@apollo/client/utilities'
+// import { WebSocketLink } from '@apollo/client/link/ws'
 import { isBrowser } from 'browser-or-node'
-import ws from 'ws'
+// import ws from 'ws'
 
-import { AuthenticationQueries } from './queries '
+import { AuthenticationQueries } from './queries'
 
 export class AuthenticationAPI {
     public client: ApolloClient<NormalizedCacheObject>

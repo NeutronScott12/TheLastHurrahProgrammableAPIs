@@ -34,6 +34,7 @@ describe('Authentication Tests', () => {
             password,
             username,
             two_factor_authentication: false,
+            repeat_password: password,
         })
 
         if (result && result.data) {
@@ -89,6 +90,15 @@ describe('Authentication Tests', () => {
 
         expect(result).toBeDefined()
     })
+
+    // it('failed two factor login', async () => {
+    //     const result = await mutations.two_factor_login({
+    //         email,
+    //         two_factor_id: '123',
+    //     })
+
+    //     // expect(result).toBeDefined()
+    // })
 
     afterAll(async () => {
         const result = await mutations.delete_user({ email })

@@ -25,6 +25,7 @@ import {
     changePasswordValidation,
     loginPasswordValidation,
     registrationValidation,
+    twoFactorValidation,
 } from './validation'
 
 export class AuthenticationMutations {
@@ -52,17 +53,19 @@ export class AuthenticationMutations {
 
             return regsiter(args, { ...this })
         } catch (error) {
+            console.log(error)
             throw new ApolloError({})
         }
     }
 
     public async two_factor_login(args: ITwoFactorLogin) {
         try {
-            await loginPasswordValidation.validate(args)
+            await twoFactorValidation.validate(args)
 
             return two_factor_login(args, { ...this })
         } catch (error) {
-            return error as AuthenticationAPIErrors
+            console.log('BIG ERROR', error)
+            throw new ApolloError({})
         }
     }
 
@@ -80,6 +83,7 @@ export class AuthenticationMutations {
 
             return change_password(args, { ...this })
         } catch (error) {
+            console.log('CHANGE_PASSWORD_FRONT', error)
             throw new ApolloError({})
         }
     }
