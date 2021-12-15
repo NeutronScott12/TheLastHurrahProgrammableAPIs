@@ -25,3 +25,8 @@ export interface IForgotPasswordArgs {
 export interface IDeleteUserArgs {
     email: string
 }
+
+export interface IChangePasswordArgs {
+    email: string
+    password: string
+}

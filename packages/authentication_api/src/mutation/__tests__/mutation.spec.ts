@@ -75,6 +75,15 @@ describe('Authentication Tests', () => {
         expect(result).toBeDefined()
     })
 
+    it('change password', async () => {
+        const result = await mutations.change_password({
+            email,
+            password: 'new password',
+        })
+
+        console.log(result)
+    })
+
     afterAll(async () => {
         const result = await mutations.delete_user({ email })
 

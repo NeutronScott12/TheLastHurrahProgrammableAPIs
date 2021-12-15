@@ -16,7 +16,9 @@ export const delete_user = async (
         return client.mutate<DeleteUserMutation, DeleteUserMutationVariables>({
             mutation: DeleteUserDocument,
             variables: {
-                ...args,
+                deleteUserInput: {
+                    ...args,
+                },
             },
         })
     } catch (error) {
