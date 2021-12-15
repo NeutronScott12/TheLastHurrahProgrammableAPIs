@@ -81,7 +81,13 @@ describe('Authentication Tests', () => {
             password: 'new password',
         })
 
-        console.log(result)
+        if (result && result.data) {
+            const { success } = result.data.change_password
+
+            expect(success).toBeTruthy()
+        }
+
+        expect(result).toBeDefined()
     })
 
     afterAll(async () => {
