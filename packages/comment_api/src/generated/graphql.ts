@@ -46,6 +46,7 @@ export type ApplicationModel = {
   auth_secret: Scalars['String'];
   authenticated_users: Array<UserModel>;
   authenticated_users_ids: Array<Scalars['String']>;
+  banned_users_by_id: Array<Scalars['String']>;
   category: Category;
   comment_policy_summary?: Maybe<Scalars['String']>;
   comment_policy_url?: Maybe<Scalars['String']>;
@@ -101,6 +102,11 @@ export type AvatarEntity = {
   url: Scalars['String'];
 };
 
+export type BlockUserFromApplicationInput = {
+  application_id: Scalars['String'];
+  user_ids: Array<Scalars['String']>;
+};
+
 export enum Category {
   Tech = 'TECH'
 }
@@ -145,12 +151,6 @@ export type ClosePollInput = {
   poll_id: Scalars['String'];
 };
 
-export type CommentAndVoteCountEntity = {
-  __typename?: 'CommentAndVoteCountEntity';
-  comment_count: Scalars['Int'];
-  vote_count: Scalars['Int'];
-};
-
 export type CommentModel = {
   __typename?: 'CommentModel';
   _count: CountModel;
@@ -180,8 +180,19 @@ export type CommentModel = {
   user_id: Scalars['String'];
 };
 
+export type CommentStatsEntity = {
+  __typename?: 'CommentStatsEntity';
+  comments_per_day: Array<CommentsPerDay>;
+};
+
 export type CommentsByUserIdInput = {
   user_id?: InputMaybe<Scalars['String']>;
+};
+
+export type CommentsPerDay = {
+  __typename?: 'CommentsPerDay';
+  count: Scalars['Int'];
+  date: Scalars['DateTime'];
 };
 
 export type CountModel = {
@@ -258,6 +269,10 @@ export type DeletePollInput = {
   thread_id: Scalars['String'];
 };
 
+export type DeleteUserInput = {
+  email: Scalars['String'];
+};
+
 export type FetchAllComments = {
   __typename?: 'FetchAllComments';
   comments: Array<CommentModel>;
@@ -266,10 +281,6 @@ export type FetchAllComments = {
 
 export type FetchApplicationByShortNameInput = {
   application_short_name: Scalars['String'];
-};
-
-export type FetchCommentAndVoteCountInput = {
-  user_id: Scalars['String'];
 };
 
 export type FetchCommentByApplicationName = {
@@ -290,6 +301,11 @@ export type FetchCommentByThreadIdResponse = {
   __typename?: 'FetchCommentByThreadIdResponse';
   comments: Array<CommentModel>;
   comments_count: Scalars['Float'];
+};
+
+export type FetchCommentStatsInput = {
+  end_date: Scalars['DateTime'];
+  start_date: Scalars['DateTime'];
 };
 
 export type FetchCommentsByApplicationId = {
@@ -330,6 +346,11 @@ export type FetchThreadCommentsBySort = {
   limit: Scalars['Int'];
   skip: Scalars['Int'];
   sort?: InputMaybe<Sort>;
+};
+
+export type FetchThreadStats = {
+  limit: Scalars['Int'];
+  skip: Scalars['Int'];
 };
 
 export type FetchThreadsByUserIdInput = {
@@ -387,9 +408,12 @@ export type Mutation = {
   __typename?: 'Mutation';
   add_application_moderator: ApplicationModel;
   add_pinned_comment: ThreadModel;
+  add_user_to_shadow_ban: StandardResponseModel;
   add_user_to_threads_active_users: StandardResponseModel;
   approve_comments: StandardResponseModel;
   block_user: StandardResponseModel;
+  block_users_from_application: ApplicationModel;
+  cancel_order: StandardResponseModel;
   change_comment_settings: CommentModel;
   change_password: StandardResponseModel;
   close_poll: PollEntity;
@@ -410,14 +434,17 @@ export type Mutation = {
   forgot_password: StandardResponseModel;
   login_user: LoginResponseUnion;
   logout_user: StandardResponseModel;
+  refund_order: StandardResponseModel;
   regenerate_new_auth_secret: ApplicationModel;
   register_user: StandardResponseModel;
   remove_application: StandardResponseModel;
   remove_application_moderator: ApplicationModel;
   remove_user_from_threads_active_users: StandardResponseModel;
+  remove_users_from_shadow_ban: StandardResponseModel;
   toggle_subscription_to_thread: StandardResponseModel;
   two_factor_login: TwoFactorLoginSuccessResponse;
   unblock_user: StandardResponseModel;
+  unblock_users_from_application: ApplicationModel;
   up_vote_comment: CommentModel;
   update_application: ApplicationModel;
   update_application_comment_rules: ApplicationModel;
@@ -437,6 +464,11 @@ export type MutationAdd_Pinned_CommentArgs = {
 };
 
 
+export type MutationAdd_User_To_Shadow_BanArgs = {
+  addUserToShadowBan: ShadowBanUserByIdInput;
+};
+
+
 export type MutationAdd_User_To_Threads_Active_UsersArgs = {
   addUserToActiveUsersInput: AddUserToActiveUsersInput;
 };
@@ -449,6 +481,16 @@ export type MutationApprove_CommentsArgs = {
 
 export type MutationBlock_UserArgs = {
   user_id: Scalars['String'];
+};
+
+
+export type MutationBlock_Users_From_ApplicationArgs = {
+  blockUsersFromApplication: BlockUserFromApplicationInput;
+};
+
+
+export type MutationCancel_OrderArgs = {
+  idempotency_key: Scalars['String'];
 };
 
 
@@ -528,7 +570,7 @@ export type MutationDelete_PollArgs = {
 
 
 export type MutationDelete_UserArgs = {
-  email: Scalars['String'];
+  deleteUserInput: DeleteUserInput;
 };
 
 
@@ -544,6 +586,11 @@ export type MutationForgot_PasswordArgs = {
 
 export type MutationLogin_UserArgs = {
   loginInput: LoginInput;
+};
+
+
+export type MutationRefund_OrderArgs = {
+  refundOrderInput: RefundOrderInput;
 };
 
 
@@ -572,6 +619,11 @@ export type MutationRemove_User_From_Threads_Active_UsersArgs = {
 };
 
 
+export type MutationRemove_Users_From_Shadow_BanArgs = {
+  removeUserToShadowBan: ShadowBanUserByIdInput;
+};
+
+
 export type MutationToggle_Subscription_To_ThreadArgs = {
   toggleSubscriptionToThreadInput: ToggleSubscriptionToThreadInput;
 };
@@ -584,6 +636,11 @@ export type MutationTwo_Factor_LoginArgs = {
 
 export type MutationUnblock_UserArgs = {
   user_id: Scalars['String'];
+};
+
+
+export type MutationUnblock_Users_From_ApplicationArgs = {
+  unBlockUsersFromApplication: UnBlockUserFromApplicationInput;
 };
 
 
@@ -613,7 +670,7 @@ export type MutationUpdate_Poll_VoteArgs = {
 
 
 export type MutationUpdate_UserArgs = {
-  UpdateUserInput: UpdateUserInput;
+  updateUserInput: UpdateUserInput;
 };
 
 export type NotificationEntity = {
@@ -706,7 +763,7 @@ export type Query = {
   fetch_all_threads: Array<ThreadModel>;
   fetch_application_by_short_name: ApplicationModel;
   fetch_applications_by_owner_id: Array<ApplicationModel>;
-  fetch_comment_and_vote_count: CommentAndVoteCountEntity;
+  fetch_comment_stats: CommentStatsEntity;
   fetch_comments: FetchAllComments;
   fetch_comments_by_application_id: FetchCommentsByApplicationId;
   fetch_comments_by_application_short_name: FetchCommentByApplicationName;
@@ -733,8 +790,8 @@ export type QueryFetch_Application_By_Short_NameArgs = {
 };
 
 
-export type QueryFetch_Comment_And_Vote_CountArgs = {
-  fetchCommentAndVoteCountInput: FetchCommentAndVoteCountInput;
+export type QueryFetch_Comment_StatsArgs = {
+  fetchCommentStatsInput: FetchCommentStatsInput;
 };
 
 
@@ -826,6 +883,14 @@ export type RatingModel = {
   id: Scalars['String'];
 };
 
+export type RefundOrderInput = {
+  amount_money: Scalars['BigInt'];
+  currency: Scalars['String'];
+  idempotency_key: Scalars['String'];
+  payment_id: Scalars['String'];
+  reason: Scalars['String'];
+};
+
 export type RegistrationInput = {
   application_id?: InputMaybe<Scalars['String']>;
   email: Scalars['String'];
@@ -869,6 +934,11 @@ export enum Status {
   Online = 'ONLINE'
 }
 
+export type ShadowBanUserByIdInput = {
+  application_short_name: Scalars['String'];
+  user_id: Scalars['String'];
+};
+
 export type StandardResponse = {
   __typename?: 'StandardResponse';
   message: Scalars['String'];
@@ -900,6 +970,7 @@ export type ThreadModel = {
   subscribed_users: Array<UserModel>;
   subscribed_users_ids: Array<Scalars['String']>;
   thread_comments: FetchCommentByThreadIdResponse;
+  thread_stats: ViewEntity;
   title: Scalars['String'];
   website_url: Scalars['String'];
 };
@@ -908,6 +979,11 @@ export type ThreadModel = {
 export type ThreadModelThread_CommentsArgs = {
   commentsByUserIdInput?: InputMaybe<CommentsByUserIdInput>;
   fetchThreadCommentsBySort: FetchThreadCommentsBySort;
+};
+
+
+export type ThreadModelThread_StatsArgs = {
+  fetchThreadStats: FetchThreadStats;
 };
 
 export type ToggleSubscriptionToThreadInput = {
@@ -943,6 +1019,11 @@ export enum User_Role {
   SuperAdmin = 'SUPER_ADMIN',
   User = 'USER'
 }
+
+export type UnBlockUserFromApplicationInput = {
+  application_id: Scalars['String'];
+  user_ids: Array<Scalars['String']>;
+};
 
 export type UpdateApplicationCommentRulesInput = {
   allow_images_and_videos_on_comments: Scalars['Boolean'];
@@ -1002,9 +1083,20 @@ export type UserModel = {
   username: Scalars['String'];
 };
 
+export type ViewEntity = {
+  __typename?: 'ViewEntity';
+  created_at: Scalars['DateTime'];
+  id: Scalars['String'];
+  updated_at: Scalars['DateTime'];
+  user_id: Scalars['String'];
+  view_count: Scalars['Int'];
+};
+
 export type VoteEntity = {
   __typename?: 'VoteEntity';
+  created_at: Scalars['DateTime'];
   id: Scalars['String'];
+  updated_at: Scalars['DateTime'];
   user_id: Scalars['String'];
 };
 
@@ -1553,7 +1645,7 @@ export function useFetchCommentByThreadIdLazyQuery(baseOptions?: Apollo.LazyQuer
 export type FetchCommentByThreadIdQueryHookResult = ReturnType<typeof useFetchCommentByThreadIdQuery>;
 export type FetchCommentByThreadIdLazyQueryHookResult = ReturnType<typeof useFetchCommentByThreadIdLazyQuery>;
 export type FetchCommentByThreadIdQueryResult = Apollo.QueryResult<FetchCommentByThreadIdQuery, FetchCommentByThreadIdQueryVariables>;
-export type ApplicationModelKeySpecifier = ('adult_content' | 'allow_images_and_videos_on_comments' | 'application_name' | 'application_owner' | 'application_owner_id' | 'auth_secret' | 'authenticated_users' | 'authenticated_users_ids' | 'category' | 'comment_policy_summary' | 'comment_policy_url' | 'commenters_users_ids' | 'comments' | 'cost' | 'created_at' | 'default_avatar_url' | 'description' | 'display_comments_when_flagged' | 'email_mods_when_comments_flagged' | 'id' | 'language' | 'links_in_comments' | 'moderators' | 'moderators_ids' | 'plan' | 'pre_comment_moderation' | 'renewal' | 'short_name' | 'theme' | 'thread_ids' | 'threads' | 'updated_at' | 'website_url' | ApplicationModelKeySpecifier)[];
+export type ApplicationModelKeySpecifier = ('adult_content' | 'allow_images_and_videos_on_comments' | 'application_name' | 'application_owner' | 'application_owner_id' | 'auth_secret' | 'authenticated_users' | 'authenticated_users_ids' | 'banned_users_by_id' | 'category' | 'comment_policy_summary' | 'comment_policy_url' | 'commenters_users_ids' | 'comments' | 'cost' | 'created_at' | 'default_avatar_url' | 'description' | 'display_comments_when_flagged' | 'email_mods_when_comments_flagged' | 'id' | 'language' | 'links_in_comments' | 'moderators' | 'moderators_ids' | 'plan' | 'pre_comment_moderation' | 'renewal' | 'short_name' | 'theme' | 'thread_ids' | 'threads' | 'updated_at' | 'website_url' | ApplicationModelKeySpecifier)[];
 export type ApplicationModelFieldPolicy = {
 	adult_content?: FieldPolicy<any> | FieldReadFunction<any>,
 	allow_images_and_videos_on_comments?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -1563,6 +1655,7 @@ export type ApplicationModelFieldPolicy = {
 	auth_secret?: FieldPolicy<any> | FieldReadFunction<any>,
 	authenticated_users?: FieldPolicy<any> | FieldReadFunction<any>,
 	authenticated_users_ids?: FieldPolicy<any> | FieldReadFunction<any>,
+	banned_users_by_id?: FieldPolicy<any> | FieldReadFunction<any>,
 	category?: FieldPolicy<any> | FieldReadFunction<any>,
 	comment_policy_summary?: FieldPolicy<any> | FieldReadFunction<any>,
 	comment_policy_url?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -1620,11 +1713,6 @@ export type CardDetailEntityFieldPolicy = {
 	statement_description?: FieldPolicy<any> | FieldReadFunction<any>,
 	status?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type CommentAndVoteCountEntityKeySpecifier = ('comment_count' | 'vote_count' | CommentAndVoteCountEntityKeySpecifier)[];
-export type CommentAndVoteCountEntityFieldPolicy = {
-	comment_count?: FieldPolicy<any> | FieldReadFunction<any>,
-	vote_count?: FieldPolicy<any> | FieldReadFunction<any>
-};
 export type CommentModelKeySpecifier = ('_count' | 'application_id' | 'approved' | 'author' | 'created_at' | 'deleted' | 'down_vote' | 'edited' | 'flagged' | 'id' | 'json_body' | 'parent_id' | 'pending' | 'plain_text_body' | 'private_information' | 'replied_to_id' | 'replied_to_user' | 'replies' | 'reply_notification' | 'reports' | 'thread_id' | 'threatening_content' | 'up_vote' | 'updated_at' | 'user_id' | CommentModelKeySpecifier)[];
 export type CommentModelFieldPolicy = {
 	_count?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -1652,6 +1740,15 @@ export type CommentModelFieldPolicy = {
 	up_vote?: FieldPolicy<any> | FieldReadFunction<any>,
 	updated_at?: FieldPolicy<any> | FieldReadFunction<any>,
 	user_id?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type CommentStatsEntityKeySpecifier = ('comments_per_day' | CommentStatsEntityKeySpecifier)[];
+export type CommentStatsEntityFieldPolicy = {
+	comments_per_day?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type CommentsPerDayKeySpecifier = ('count' | 'date' | CommentsPerDayKeySpecifier)[];
+export type CommentsPerDayFieldPolicy = {
+	count?: FieldPolicy<any> | FieldReadFunction<any>,
+	date?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type CountModelKeySpecifier = ('down_vote' | 'replies' | 'up_vote' | CountModelKeySpecifier)[];
 export type CountModelFieldPolicy = {
@@ -1688,13 +1785,16 @@ export type LoginResponseFieldPolicy = {
 	two_factor_authentication?: FieldPolicy<any> | FieldReadFunction<any>,
 	user?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type MutationKeySpecifier = ('add_application_moderator' | 'add_pinned_comment' | 'add_user_to_threads_active_users' | 'approve_comments' | 'block_user' | 'change_comment_settings' | 'change_password' | 'close_poll' | 'confirm_user' | 'create_application' | 'create_comment' | 'create_order' | 'create_poll' | 'create_reply_comment' | 'create_report' | 'delete_comment' | 'delete_many_comments' | 'delete_many_notifications' | 'delete_notification' | 'delete_poll' | 'delete_user' | 'down_vote_comment' | 'forgot_password' | 'login_user' | 'logout_user' | 'regenerate_new_auth_secret' | 'register_user' | 'remove_application' | 'remove_application_moderator' | 'remove_user_from_threads_active_users' | 'toggle_subscription_to_thread' | 'two_factor_login' | 'unblock_user' | 'up_vote_comment' | 'update_application' | 'update_application_comment_rules' | 'update_comment' | 'update_poll_vote' | 'update_user' | MutationKeySpecifier)[];
+export type MutationKeySpecifier = ('add_application_moderator' | 'add_pinned_comment' | 'add_user_to_shadow_ban' | 'add_user_to_threads_active_users' | 'approve_comments' | 'block_user' | 'block_users_from_application' | 'cancel_order' | 'change_comment_settings' | 'change_password' | 'close_poll' | 'confirm_user' | 'create_application' | 'create_comment' | 'create_order' | 'create_poll' | 'create_reply_comment' | 'create_report' | 'delete_comment' | 'delete_many_comments' | 'delete_many_notifications' | 'delete_notification' | 'delete_poll' | 'delete_user' | 'down_vote_comment' | 'forgot_password' | 'login_user' | 'logout_user' | 'refund_order' | 'regenerate_new_auth_secret' | 'register_user' | 'remove_application' | 'remove_application_moderator' | 'remove_user_from_threads_active_users' | 'remove_users_from_shadow_ban' | 'toggle_subscription_to_thread' | 'two_factor_login' | 'unblock_user' | 'unblock_users_from_application' | 'up_vote_comment' | 'update_application' | 'update_application_comment_rules' | 'update_comment' | 'update_poll_vote' | 'update_user' | MutationKeySpecifier)[];
 export type MutationFieldPolicy = {
 	add_application_moderator?: FieldPolicy<any> | FieldReadFunction<any>,
 	add_pinned_comment?: FieldPolicy<any> | FieldReadFunction<any>,
+	add_user_to_shadow_ban?: FieldPolicy<any> | FieldReadFunction<any>,
 	add_user_to_threads_active_users?: FieldPolicy<any> | FieldReadFunction<any>,
 	approve_comments?: FieldPolicy<any> | FieldReadFunction<any>,
 	block_user?: FieldPolicy<any> | FieldReadFunction<any>,
+	block_users_from_application?: FieldPolicy<any> | FieldReadFunction<any>,
+	cancel_order?: FieldPolicy<any> | FieldReadFunction<any>,
 	change_comment_settings?: FieldPolicy<any> | FieldReadFunction<any>,
 	change_password?: FieldPolicy<any> | FieldReadFunction<any>,
 	close_poll?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -1715,14 +1815,17 @@ export type MutationFieldPolicy = {
 	forgot_password?: FieldPolicy<any> | FieldReadFunction<any>,
 	login_user?: FieldPolicy<any> | FieldReadFunction<any>,
 	logout_user?: FieldPolicy<any> | FieldReadFunction<any>,
+	refund_order?: FieldPolicy<any> | FieldReadFunction<any>,
 	regenerate_new_auth_secret?: FieldPolicy<any> | FieldReadFunction<any>,
 	register_user?: FieldPolicy<any> | FieldReadFunction<any>,
 	remove_application?: FieldPolicy<any> | FieldReadFunction<any>,
 	remove_application_moderator?: FieldPolicy<any> | FieldReadFunction<any>,
 	remove_user_from_threads_active_users?: FieldPolicy<any> | FieldReadFunction<any>,
+	remove_users_from_shadow_ban?: FieldPolicy<any> | FieldReadFunction<any>,
 	toggle_subscription_to_thread?: FieldPolicy<any> | FieldReadFunction<any>,
 	two_factor_login?: FieldPolicy<any> | FieldReadFunction<any>,
 	unblock_user?: FieldPolicy<any> | FieldReadFunction<any>,
+	unblock_users_from_application?: FieldPolicy<any> | FieldReadFunction<any>,
 	up_vote_comment?: FieldPolicy<any> | FieldReadFunction<any>,
 	update_application?: FieldPolicy<any> | FieldReadFunction<any>,
 	update_application_comment_rules?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -1796,7 +1899,7 @@ export type ProfileEntityFieldPolicy = {
 	profile_comments?: FieldPolicy<any> | FieldReadFunction<any>,
 	user?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type QueryKeySpecifier = ('current_user' | 'fetch_all_applications' | 'fetch_all_orders' | 'fetch_all_threads' | 'fetch_application_by_short_name' | 'fetch_applications_by_owner_id' | 'fetch_comment_and_vote_count' | 'fetch_comments' | 'fetch_comments_by_application_id' | 'fetch_comments_by_application_short_name' | 'fetch_comments_by_thread_id' | 'fetch_notifications' | 'fetch_notifications_by_application_id' | 'fetch_notifications_by_short_name' | 'fetch_notifications_by_user_id' | 'fetch_threads_by_user_id' | 'fetch_users' | 'find_one_application_by_id' | 'find_one_application_by_name' | 'find_one_thread_or_create_one' | 'find_profile' | 'find_thread_by_id' | 'is_user_subscribed_to_thread' | 'resend_email_code' | 'search_user_by_email' | QueryKeySpecifier)[];
+export type QueryKeySpecifier = ('current_user' | 'fetch_all_applications' | 'fetch_all_orders' | 'fetch_all_threads' | 'fetch_application_by_short_name' | 'fetch_applications_by_owner_id' | 'fetch_comment_stats' | 'fetch_comments' | 'fetch_comments_by_application_id' | 'fetch_comments_by_application_short_name' | 'fetch_comments_by_thread_id' | 'fetch_notifications' | 'fetch_notifications_by_application_id' | 'fetch_notifications_by_short_name' | 'fetch_notifications_by_user_id' | 'fetch_threads_by_user_id' | 'fetch_users' | 'find_one_application_by_id' | 'find_one_application_by_name' | 'find_one_thread_or_create_one' | 'find_profile' | 'find_thread_by_id' | 'is_user_subscribed_to_thread' | 'resend_email_code' | 'search_user_by_email' | QueryKeySpecifier)[];
 export type QueryFieldPolicy = {
 	current_user?: FieldPolicy<any> | FieldReadFunction<any>,
 	fetch_all_applications?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -1804,7 +1907,7 @@ export type QueryFieldPolicy = {
 	fetch_all_threads?: FieldPolicy<any> | FieldReadFunction<any>,
 	fetch_application_by_short_name?: FieldPolicy<any> | FieldReadFunction<any>,
 	fetch_applications_by_owner_id?: FieldPolicy<any> | FieldReadFunction<any>,
-	fetch_comment_and_vote_count?: FieldPolicy<any> | FieldReadFunction<any>,
+	fetch_comment_stats?: FieldPolicy<any> | FieldReadFunction<any>,
 	fetch_comments?: FieldPolicy<any> | FieldReadFunction<any>,
 	fetch_comments_by_application_id?: FieldPolicy<any> | FieldReadFunction<any>,
 	fetch_comments_by_application_short_name?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -1847,7 +1950,7 @@ export type StandardResponseModelFieldPolicy = {
 	message?: FieldPolicy<any> | FieldReadFunction<any>,
 	success?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type ThreadModelKeySpecifier = ('application_id' | 'commenters_ids' | 'id' | 'parent_application' | 'pinned_comment' | 'pinned_comment_id' | 'poll' | 'subscribed_users' | 'subscribed_users_ids' | 'thread_comments' | 'title' | 'website_url' | ThreadModelKeySpecifier)[];
+export type ThreadModelKeySpecifier = ('application_id' | 'commenters_ids' | 'id' | 'parent_application' | 'pinned_comment' | 'pinned_comment_id' | 'poll' | 'subscribed_users' | 'subscribed_users_ids' | 'thread_comments' | 'thread_stats' | 'title' | 'website_url' | ThreadModelKeySpecifier)[];
 export type ThreadModelFieldPolicy = {
 	application_id?: FieldPolicy<any> | FieldReadFunction<any>,
 	commenters_ids?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -1859,6 +1962,7 @@ export type ThreadModelFieldPolicy = {
 	subscribed_users?: FieldPolicy<any> | FieldReadFunction<any>,
 	subscribed_users_ids?: FieldPolicy<any> | FieldReadFunction<any>,
 	thread_comments?: FieldPolicy<any> | FieldReadFunction<any>,
+	thread_stats?: FieldPolicy<any> | FieldReadFunction<any>,
 	title?: FieldPolicy<any> | FieldReadFunction<any>,
 	website_url?: FieldPolicy<any> | FieldReadFunction<any>
 };
@@ -1893,9 +1997,19 @@ export type UserModelFieldPolicy = {
 	user_role?: FieldPolicy<any> | FieldReadFunction<any>,
 	username?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type VoteEntityKeySpecifier = ('id' | 'user_id' | VoteEntityKeySpecifier)[];
-export type VoteEntityFieldPolicy = {
+export type ViewEntityKeySpecifier = ('created_at' | 'id' | 'updated_at' | 'user_id' | 'view_count' | ViewEntityKeySpecifier)[];
+export type ViewEntityFieldPolicy = {
+	created_at?: FieldPolicy<any> | FieldReadFunction<any>,
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
+	updated_at?: FieldPolicy<any> | FieldReadFunction<any>,
+	user_id?: FieldPolicy<any> | FieldReadFunction<any>,
+	view_count?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type VoteEntityKeySpecifier = ('created_at' | 'id' | 'updated_at' | 'user_id' | VoteEntityKeySpecifier)[];
+export type VoteEntityFieldPolicy = {
+	created_at?: FieldPolicy<any> | FieldReadFunction<any>,
+	id?: FieldPolicy<any> | FieldReadFunction<any>,
+	updated_at?: FieldPolicy<any> | FieldReadFunction<any>,
 	user_id?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type StrictTypedTypePolicies = {
@@ -1911,13 +2025,17 @@ export type StrictTypedTypePolicies = {
 		keyFields?: false | CardDetailEntityKeySpecifier | (() => undefined | CardDetailEntityKeySpecifier),
 		fields?: CardDetailEntityFieldPolicy,
 	},
-	CommentAndVoteCountEntity?: Omit<TypePolicy, "fields" | "keyFields"> & {
-		keyFields?: false | CommentAndVoteCountEntityKeySpecifier | (() => undefined | CommentAndVoteCountEntityKeySpecifier),
-		fields?: CommentAndVoteCountEntityFieldPolicy,
-	},
 	CommentModel?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | CommentModelKeySpecifier | (() => undefined | CommentModelKeySpecifier),
 		fields?: CommentModelFieldPolicy,
+	},
+	CommentStatsEntity?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | CommentStatsEntityKeySpecifier | (() => undefined | CommentStatsEntityKeySpecifier),
+		fields?: CommentStatsEntityFieldPolicy,
+	},
+	CommentsPerDay?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | CommentsPerDayKeySpecifier | (() => undefined | CommentsPerDayKeySpecifier),
+		fields?: CommentsPerDayFieldPolicy,
 	},
 	CountModel?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | CountModelKeySpecifier | (() => undefined | CountModelKeySpecifier),
@@ -2006,6 +2124,10 @@ export type StrictTypedTypePolicies = {
 	UserModel?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | UserModelKeySpecifier | (() => undefined | UserModelKeySpecifier),
 		fields?: UserModelFieldPolicy,
+	},
+	ViewEntity?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | ViewEntityKeySpecifier | (() => undefined | ViewEntityKeySpecifier),
+		fields?: ViewEntityFieldPolicy,
 	},
 	VoteEntity?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | VoteEntityKeySpecifier | (() => undefined | VoteEntityKeySpecifier),
