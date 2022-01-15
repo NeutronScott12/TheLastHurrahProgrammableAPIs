@@ -21,6 +21,7 @@ export class AuthenticationAPI {
         uri: string,
         application_short_name: string,
         cache?: InMemoryCache,
+        token_name?: string,
     ) {
         this.application_short_name = application_short_name
         this.generateClient(uri, cache!)
