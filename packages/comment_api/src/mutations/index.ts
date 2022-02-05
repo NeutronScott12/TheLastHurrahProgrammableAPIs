@@ -4,13 +4,18 @@ import {
     InMemoryCache,
     NormalizedCacheObject,
 } from '@apollo/client'
+import { T } from 'ramda'
 
 import {
     CreateCommentInput,
+    CreateCommentReportDocument,
+    CreateCommentReportMutation,
+    CreateCommentReportMutationVariables,
     CreateReplyCommentInput,
     DownVoteCommentDocument,
     DownVoteCommentMutation,
     DownVoteCommentMutationVariables,
+    Report_Reason,
     Sort,
     UpdateCommentInput,
     UpVoteCommentDocument,
@@ -155,6 +160,33 @@ export class CommentMutations {
             >({
                 mutation: DownVoteCommentDocument,
                 variables: { comment_id },
+            })
+        } catch (error) {
+            throw new Error()
+        }
+    }
+
+    public async reportComment(
+        comment_id: string,
+        report_reason: Report_Reason,
+    ) {
+        try {
+            const self = this
+            if (!comment_id) {
+                throw new Error('Incorrect or Incomplete Arguments')
+            }
+
+            return self.client.mutate<
+                CreateCommentReportMutation,
+                CreateCommentReportMutationVariables
+            >({
+                mutation: CreateCommentReportDocument,
+                variables: {
+                    createReportInput: {
+                        comment_id,
+                        report: report_reason,
+                    },
+                },
             })
         } catch (error) {
             throw new Error()

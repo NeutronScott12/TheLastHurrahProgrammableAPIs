@@ -4,7 +4,6 @@
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "license": "MIT",
-    "private": false,
     "scripts": {
         "graphql-codegen": "graphql-codegen --config codegen.yml",
         "test": "jest --runInBand",
@@ -26,8 +25,8 @@
         "@parcel/transformer-typescript-types": "^2.2.1",
         "@types/jest": "^27.4.0",
         "@types/ramda": "^0.27.64",
-        "babel-jest": "^27.4.6",
-        "jest": "^27.4.7",
+        "babel-jest": "^27.5.0",
+        "jest": "^27.5.0",
         "nodemon": "^2.0.15",
         "parcel": "^2.2.1",
         "ts-node": "^10.4.0",

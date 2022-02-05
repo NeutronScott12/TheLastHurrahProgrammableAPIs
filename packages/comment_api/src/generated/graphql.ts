@@ -6,7 +6,7 @@ export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -67,6 +67,7 @@ export type ApplicationModel = {
   pre_comment_moderation: Pre_Comment_Moderation;
   renewal?: Maybe<Scalars['DateTime']>;
   short_name: Scalars['String'];
+  subscription: SubscriptionEntity;
   theme: Theme;
   thread_ids: Array<Scalars['String']>;
   threads: Array<ThreadModel>;
@@ -145,6 +146,10 @@ export type ChangeCommentSettingsInput = {
 export type ChangePasswordInput = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+export type ChangeSubscriptionPlanInput = {
+  plan: Scalars['String'];
 };
 
 export type ClosePollInput = {
@@ -286,7 +291,7 @@ export type FetchApplicationByShortNameInput = {
 export type FetchCommentByApplicationName = {
   __typename?: 'FetchCommentByApplicationName';
   comments: Array<CommentModel>;
-  comments_count: Scalars['Float'];
+  comments_count: Scalars['Int'];
 };
 
 export type FetchCommentByThreadIdInput = {
@@ -300,7 +305,7 @@ export type FetchCommentByThreadIdInput = {
 export type FetchCommentByThreadIdResponse = {
   __typename?: 'FetchCommentByThreadIdResponse';
   comments: Array<CommentModel>;
-  comments_count: Scalars['Float'];
+  comments_count: Scalars['Int'];
 };
 
 export type FetchCommentStatsInput = {
@@ -311,7 +316,7 @@ export type FetchCommentStatsInput = {
 export type FetchCommentsByApplicationId = {
   __typename?: 'FetchCommentsByApplicationId';
   comments: Array<CommentModel>;
-  comments_count: Scalars['Float'];
+  comments_count: Scalars['Int'];
 };
 
 export type FetchCommentsByApplicationIdInput = {
@@ -414,8 +419,10 @@ export type Mutation = {
   block_user: StandardResponseModel;
   block_users_from_application: ApplicationModel;
   cancel_order: StandardResponseModel;
+  cancel_subscription_plan: ApplicationModel;
   change_comment_settings: CommentModel;
   change_password: StandardResponseModel;
+  change_subscription_plan: ApplicationModel;
   close_poll: PollEntity;
   confirm_user: StandardResponseModel;
   create_application: ApplicationModel;
@@ -429,6 +436,7 @@ export type Mutation = {
   delete_many_notifications: StandardResponse;
   delete_notification: StandardResponse;
   delete_poll: StandardResponseModel;
+  delete_report_by_id: StandardResponseModel;
   delete_user: StandardResponseModel;
   down_vote_comment: CommentModel;
   forgot_password: StandardResponseModel;
@@ -451,6 +459,7 @@ export type Mutation = {
   update_comment: CommentModel;
   update_poll_vote: PollEntity;
   update_user: UserModel;
+  upgrade_subscription_plan: StandardResponseModel;
 };
 
 
@@ -501,6 +510,11 @@ export type MutationChange_Comment_SettingsArgs = {
 
 export type MutationChange_PasswordArgs = {
   changePasswordInput: ChangePasswordInput;
+};
+
+
+export type MutationChange_Subscription_PlanArgs = {
+  changeSubscriptionPlan: ChangeSubscriptionPlanInput;
 };
 
 
@@ -566,6 +580,11 @@ export type MutationDelete_NotificationArgs = {
 
 export type MutationDelete_PollArgs = {
   deletePollInput: DeletePollInput;
+};
+
+
+export type MutationDelete_Report_By_IdArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -760,6 +779,7 @@ export type Query = {
   current_user: UserModel;
   fetch_all_applications: Array<ApplicationModel>;
   fetch_all_orders: Array<OrderEntity>;
+  fetch_all_reports: Array<ReportModel>;
   fetch_all_threads: Array<ThreadModel>;
   fetch_application_by_short_name: ApplicationModel;
   fetch_applications_by_owner_id: Array<ApplicationModel>;
@@ -951,6 +971,17 @@ export type StandardResponseModel = {
   success: Scalars['Boolean'];
 };
 
+export type SubscriptionEntity = {
+  __typename?: 'SubscriptionEntity';
+  created_at: Scalars['DateTime'];
+  id: Scalars['String'];
+  idempotency_key: Scalars['String'];
+  order_id: Scalars['String'];
+  renewal: Scalars['Boolean'];
+  renewal_date: Scalars['DateTime'];
+  updated_at: Scalars['DateTime'];
+};
+
 export enum Theme {
   Auto = 'AUTO',
   Dark = 'DARK',
@@ -1119,14 +1150,14 @@ export type CreateThreadComentMutationVariables = Exact<{
 }>;
 
 
-export type CreateThreadComentMutation = { __typename?: 'Mutation', create_comment: { __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined }>, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined }>, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined } };
+export type CreateThreadComentMutation = { __typename?: 'Mutation', create_comment: { __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null }>, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null }>, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null } };
 
 export type EditThreadCommentMutationVariables = Exact<{
   UpdateCommentInput: UpdateCommentInput;
 }>;
 
 
-export type EditThreadCommentMutation = { __typename?: 'Mutation', update_comment: { __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined }>, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined }>, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined } };
+export type EditThreadCommentMutation = { __typename?: 'Mutation', update_comment: { __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null }>, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null }>, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null } };
 
 export type DeleteThreadCommentMutationVariables = Exact<{
   commentId: Scalars['String'];
@@ -1140,23 +1171,23 @@ export type CreateReplyCommentMutationVariables = Exact<{
 }>;
 
 
-export type CreateReplyCommentMutation = { __typename?: 'Mutation', create_reply_comment: { __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined }>, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined }>, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined } };
+export type CreateReplyCommentMutation = { __typename?: 'Mutation', create_reply_comment: { __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null }>, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null }>, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null } };
 
 export type UpVoteCommentMutationVariables = Exact<{
   comment_id: Scalars['String'];
 }>;
 
 
-export type UpVoteCommentMutation = { __typename?: 'Mutation', up_vote_comment: { __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined }>, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined }>, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined } };
+export type UpVoteCommentMutation = { __typename?: 'Mutation', up_vote_comment: { __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null }>, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null }>, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null } };
 
 export type DownVoteCommentMutationVariables = Exact<{
   comment_id: Scalars['String'];
 }>;
 
 
-export type DownVoteCommentMutation = { __typename?: 'Mutation', down_vote_comment: { __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined }>, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined }>, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined } };
+export type DownVoteCommentMutation = { __typename?: 'Mutation', down_vote_comment: { __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null }>, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null }>, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null } };
 
-export type ThreadFragmentFragment = { __typename?: 'ThreadModel', id: string, application_id: string, title: string, website_url: string, poll?: { __typename?: 'PollEntity', id: string, title: string, created_at: any, updated_at: any, closed: boolean, voted: Array<string>, options: Array<{ __typename?: 'OptionEntity', id: string, option: string, votes: Array<{ __typename?: 'VoteEntity', id: string, user_id: string }> }> } | null | undefined, pinned_comment?: { __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, author: { __typename?: 'UserModel', username: string, id: string } } | null | undefined };
+export type ThreadFragmentFragment = { __typename?: 'ThreadModel', id: string, application_id: string, title: string, website_url: string, poll?: { __typename?: 'PollEntity', id: string, title: string, created_at: any, updated_at: any, closed: boolean, voted: Array<string>, options: Array<{ __typename?: 'OptionEntity', id: string, option: string, votes: Array<{ __typename?: 'VoteEntity', id: string, user_id: string }> }> } | null, pinned_comment?: { __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null, author: { __typename?: 'UserModel', username: string, id: string } } | null };
 
 export type PollFragmentFragment = { __typename?: 'PollEntity', id: string, title: string, created_at: any, updated_at: any, closed: boolean, voted: Array<string>, options: Array<{ __typename?: 'OptionEntity', id: string, option: string, votes: Array<{ __typename?: 'VoteEntity', id: string, user_id: string }> }> };
 
@@ -1165,7 +1196,7 @@ export type FindOneOrCreateOneThreadQueryVariables = Exact<{
 }>;
 
 
-export type FindOneOrCreateOneThreadQuery = { __typename?: 'Query', find_one_thread_or_create_one: { __typename?: 'ThreadModel', id: string, application_id: string, title: string, website_url: string, poll?: { __typename?: 'PollEntity', id: string, title: string, created_at: any, updated_at: any, closed: boolean, voted: Array<string>, options: Array<{ __typename?: 'OptionEntity', id: string, option: string, votes: Array<{ __typename?: 'VoteEntity', id: string, user_id: string }> }> } | null | undefined, pinned_comment?: { __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, author: { __typename?: 'UserModel', username: string, id: string } } | null | undefined } };
+export type FindOneOrCreateOneThreadQuery = { __typename?: 'Query', find_one_thread_or_create_one: { __typename?: 'ThreadModel', id: string, application_id: string, title: string, website_url: string, poll?: { __typename?: 'PollEntity', id: string, title: string, created_at: any, updated_at: any, closed: boolean, voted: Array<string>, options: Array<{ __typename?: 'OptionEntity', id: string, option: string, votes: Array<{ __typename?: 'VoteEntity', id: string, user_id: string }> }> } | null, pinned_comment?: { __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null, author: { __typename?: 'UserModel', username: string, id: string } } | null } };
 
 export type DeleteManyCommentsMutationVariables = Exact<{
   deleteManyCommentsInput: DeleteManyCommentsInput;
@@ -1174,19 +1205,26 @@ export type DeleteManyCommentsMutationVariables = Exact<{
 
 export type DeleteManyCommentsMutation = { __typename?: 'Mutation', delete_many_comments: { __typename?: 'StandardResponseModel', success: boolean, message: string } };
 
-export type CommentFragmentFragment = { __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined };
+export type CreateCommentReportMutationVariables = Exact<{
+  createReportInput: CreateReportInput;
+}>;
+
+
+export type CreateCommentReportMutation = { __typename?: 'Mutation', create_report: { __typename?: 'StandardResponseModel', success: boolean, message: string } };
+
+export type CommentFragmentFragment = { __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null };
 
 export type FetchCommentsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FetchCommentsQuery = { __typename?: 'Query', fetch_comments: { __typename?: 'FetchAllComments', comments_count: number, comments: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined }> } };
+export type FetchCommentsQuery = { __typename?: 'Query', fetch_comments: { __typename?: 'FetchAllComments', comments_count: number, comments: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null }> } };
 
 export type FetchCommentByThreadIdQueryVariables = Exact<{
   fetchCommentByThreadIdInput: FetchCommentByThreadIdInput;
 }>;
 
 
-export type FetchCommentByThreadIdQuery = { __typename?: 'Query', fetch_comments_by_thread_id: { __typename?: 'FetchCommentByThreadIdResponse', comments_count: number, comments: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', parent_id?: string | null | undefined, application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null | undefined, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined }>, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined }>, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null | undefined }> } };
+export type FetchCommentByThreadIdQuery = { __typename?: 'Query', fetch_comments_by_thread_id: { __typename?: 'FetchCommentByThreadIdResponse', comments_count: number, comments: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', parent_id?: string | null, application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null }>, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null }>, author: { __typename?: 'UserModel', username: string, id: string }, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null }> } };
 
 export const PollFragmentFragmentDoc = gql`
     fragment PollFragment on PollEntity {
@@ -1561,6 +1599,40 @@ export function useDeleteManyCommentsMutation(baseOptions?: Apollo.MutationHookO
 export type DeleteManyCommentsMutationHookResult = ReturnType<typeof useDeleteManyCommentsMutation>;
 export type DeleteManyCommentsMutationResult = Apollo.MutationResult<DeleteManyCommentsMutation>;
 export type DeleteManyCommentsMutationOptions = Apollo.BaseMutationOptions<DeleteManyCommentsMutation, DeleteManyCommentsMutationVariables>;
+export const CreateCommentReportDocument = gql`
+    mutation CreateCommentReport($createReportInput: CreateReportInput!) {
+  create_report(createReportInput: $createReportInput) {
+    success
+    message
+  }
+}
+    `;
+export type CreateCommentReportMutationFn = Apollo.MutationFunction<CreateCommentReportMutation, CreateCommentReportMutationVariables>;
+
+/**
+ * __useCreateCommentReportMutation__
+ *
+ * To run a mutation, you first call `useCreateCommentReportMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCommentReportMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCommentReportMutation, { data, loading, error }] = useCreateCommentReportMutation({
+ *   variables: {
+ *      createReportInput: // value for 'createReportInput'
+ *   },
+ * });
+ */
+export function useCreateCommentReportMutation(baseOptions?: Apollo.MutationHookOptions<CreateCommentReportMutation, CreateCommentReportMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateCommentReportMutation, CreateCommentReportMutationVariables>(CreateCommentReportDocument, options);
+      }
+export type CreateCommentReportMutationHookResult = ReturnType<typeof useCreateCommentReportMutation>;
+export type CreateCommentReportMutationResult = Apollo.MutationResult<CreateCommentReportMutation>;
+export type CreateCommentReportMutationOptions = Apollo.BaseMutationOptions<CreateCommentReportMutation, CreateCommentReportMutationVariables>;
 export const FetchCommentsDocument = gql`
     query FetchComments {
   fetch_comments {
@@ -1645,7 +1717,7 @@ export function useFetchCommentByThreadIdLazyQuery(baseOptions?: Apollo.LazyQuer
 export type FetchCommentByThreadIdQueryHookResult = ReturnType<typeof useFetchCommentByThreadIdQuery>;
 export type FetchCommentByThreadIdLazyQueryHookResult = ReturnType<typeof useFetchCommentByThreadIdLazyQuery>;
 export type FetchCommentByThreadIdQueryResult = Apollo.QueryResult<FetchCommentByThreadIdQuery, FetchCommentByThreadIdQueryVariables>;
-export type ApplicationModelKeySpecifier = ('adult_content' | 'allow_images_and_videos_on_comments' | 'application_name' | 'application_owner' | 'application_owner_id' | 'auth_secret' | 'authenticated_users' | 'authenticated_users_ids' | 'banned_users_by_id' | 'category' | 'comment_policy_summary' | 'comment_policy_url' | 'commenters_users_ids' | 'comments' | 'cost' | 'created_at' | 'default_avatar_url' | 'description' | 'display_comments_when_flagged' | 'email_mods_when_comments_flagged' | 'id' | 'language' | 'links_in_comments' | 'moderators' | 'moderators_ids' | 'plan' | 'pre_comment_moderation' | 'renewal' | 'short_name' | 'theme' | 'thread_ids' | 'threads' | 'updated_at' | 'website_url' | ApplicationModelKeySpecifier)[];
+export type ApplicationModelKeySpecifier = ('adult_content' | 'allow_images_and_videos_on_comments' | 'application_name' | 'application_owner' | 'application_owner_id' | 'auth_secret' | 'authenticated_users' | 'authenticated_users_ids' | 'banned_users_by_id' | 'category' | 'comment_policy_summary' | 'comment_policy_url' | 'commenters_users_ids' | 'comments' | 'cost' | 'created_at' | 'default_avatar_url' | 'description' | 'display_comments_when_flagged' | 'email_mods_when_comments_flagged' | 'id' | 'language' | 'links_in_comments' | 'moderators' | 'moderators_ids' | 'plan' | 'pre_comment_moderation' | 'renewal' | 'short_name' | 'subscription' | 'theme' | 'thread_ids' | 'threads' | 'updated_at' | 'website_url' | ApplicationModelKeySpecifier)[];
 export type ApplicationModelFieldPolicy = {
 	adult_content?: FieldPolicy<any> | FieldReadFunction<any>,
 	allow_images_and_videos_on_comments?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -1676,6 +1748,7 @@ export type ApplicationModelFieldPolicy = {
 	pre_comment_moderation?: FieldPolicy<any> | FieldReadFunction<any>,
 	renewal?: FieldPolicy<any> | FieldReadFunction<any>,
 	short_name?: FieldPolicy<any> | FieldReadFunction<any>,
+	subscription?: FieldPolicy<any> | FieldReadFunction<any>,
 	theme?: FieldPolicy<any> | FieldReadFunction<any>,
 	thread_ids?: FieldPolicy<any> | FieldReadFunction<any>,
 	threads?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -1785,7 +1858,7 @@ export type LoginResponseFieldPolicy = {
 	two_factor_authentication?: FieldPolicy<any> | FieldReadFunction<any>,
 	user?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type MutationKeySpecifier = ('add_application_moderator' | 'add_pinned_comment' | 'add_user_to_shadow_ban' | 'add_user_to_threads_active_users' | 'approve_comments' | 'block_user' | 'block_users_from_application' | 'cancel_order' | 'change_comment_settings' | 'change_password' | 'close_poll' | 'confirm_user' | 'create_application' | 'create_comment' | 'create_order' | 'create_poll' | 'create_reply_comment' | 'create_report' | 'delete_comment' | 'delete_many_comments' | 'delete_many_notifications' | 'delete_notification' | 'delete_poll' | 'delete_user' | 'down_vote_comment' | 'forgot_password' | 'login_user' | 'logout_user' | 'refund_order' | 'regenerate_new_auth_secret' | 'register_user' | 'remove_application' | 'remove_application_moderator' | 'remove_user_from_threads_active_users' | 'remove_users_from_shadow_ban' | 'toggle_subscription_to_thread' | 'two_factor_login' | 'unblock_user' | 'unblock_users_from_application' | 'up_vote_comment' | 'update_application' | 'update_application_comment_rules' | 'update_comment' | 'update_poll_vote' | 'update_user' | MutationKeySpecifier)[];
+export type MutationKeySpecifier = ('add_application_moderator' | 'add_pinned_comment' | 'add_user_to_shadow_ban' | 'add_user_to_threads_active_users' | 'approve_comments' | 'block_user' | 'block_users_from_application' | 'cancel_order' | 'cancel_subscription_plan' | 'change_comment_settings' | 'change_password' | 'change_subscription_plan' | 'close_poll' | 'confirm_user' | 'create_application' | 'create_comment' | 'create_order' | 'create_poll' | 'create_reply_comment' | 'create_report' | 'delete_comment' | 'delete_many_comments' | 'delete_many_notifications' | 'delete_notification' | 'delete_poll' | 'delete_report_by_id' | 'delete_user' | 'down_vote_comment' | 'forgot_password' | 'login_user' | 'logout_user' | 'refund_order' | 'regenerate_new_auth_secret' | 'register_user' | 'remove_application' | 'remove_application_moderator' | 'remove_user_from_threads_active_users' | 'remove_users_from_shadow_ban' | 'toggle_subscription_to_thread' | 'two_factor_login' | 'unblock_user' | 'unblock_users_from_application' | 'up_vote_comment' | 'update_application' | 'update_application_comment_rules' | 'update_comment' | 'update_poll_vote' | 'update_user' | 'upgrade_subscription_plan' | MutationKeySpecifier)[];
 export type MutationFieldPolicy = {
 	add_application_moderator?: FieldPolicy<any> | FieldReadFunction<any>,
 	add_pinned_comment?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -1795,8 +1868,10 @@ export type MutationFieldPolicy = {
 	block_user?: FieldPolicy<any> | FieldReadFunction<any>,
 	block_users_from_application?: FieldPolicy<any> | FieldReadFunction<any>,
 	cancel_order?: FieldPolicy<any> | FieldReadFunction<any>,
+	cancel_subscription_plan?: FieldPolicy<any> | FieldReadFunction<any>,
 	change_comment_settings?: FieldPolicy<any> | FieldReadFunction<any>,
 	change_password?: FieldPolicy<any> | FieldReadFunction<any>,
+	change_subscription_plan?: FieldPolicy<any> | FieldReadFunction<any>,
 	close_poll?: FieldPolicy<any> | FieldReadFunction<any>,
 	confirm_user?: FieldPolicy<any> | FieldReadFunction<any>,
 	create_application?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -1810,6 +1885,7 @@ export type MutationFieldPolicy = {
 	delete_many_notifications?: FieldPolicy<any> | FieldReadFunction<any>,
 	delete_notification?: FieldPolicy<any> | FieldReadFunction<any>,
 	delete_poll?: FieldPolicy<any> | FieldReadFunction<any>,
+	delete_report_by_id?: FieldPolicy<any> | FieldReadFunction<any>,
 	delete_user?: FieldPolicy<any> | FieldReadFunction<any>,
 	down_vote_comment?: FieldPolicy<any> | FieldReadFunction<any>,
 	forgot_password?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -1831,7 +1907,8 @@ export type MutationFieldPolicy = {
 	update_application_comment_rules?: FieldPolicy<any> | FieldReadFunction<any>,
 	update_comment?: FieldPolicy<any> | FieldReadFunction<any>,
 	update_poll_vote?: FieldPolicy<any> | FieldReadFunction<any>,
-	update_user?: FieldPolicy<any> | FieldReadFunction<any>
+	update_user?: FieldPolicy<any> | FieldReadFunction<any>,
+	upgrade_subscription_plan?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type NotificationEntityKeySpecifier = ('application_id' | 'created_at' | 'id' | 'message' | 'updated_at' | 'url' | NotificationEntityKeySpecifier)[];
 export type NotificationEntityFieldPolicy = {
@@ -1899,11 +1976,12 @@ export type ProfileEntityFieldPolicy = {
 	profile_comments?: FieldPolicy<any> | FieldReadFunction<any>,
 	user?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type QueryKeySpecifier = ('current_user' | 'fetch_all_applications' | 'fetch_all_orders' | 'fetch_all_threads' | 'fetch_application_by_short_name' | 'fetch_applications_by_owner_id' | 'fetch_comment_stats' | 'fetch_comments' | 'fetch_comments_by_application_id' | 'fetch_comments_by_application_short_name' | 'fetch_comments_by_thread_id' | 'fetch_notifications' | 'fetch_notifications_by_application_id' | 'fetch_notifications_by_short_name' | 'fetch_notifications_by_user_id' | 'fetch_threads_by_user_id' | 'fetch_users' | 'find_one_application_by_id' | 'find_one_application_by_name' | 'find_one_thread_or_create_one' | 'find_profile' | 'find_thread_by_id' | 'is_user_subscribed_to_thread' | 'resend_email_code' | 'search_user_by_email' | QueryKeySpecifier)[];
+export type QueryKeySpecifier = ('current_user' | 'fetch_all_applications' | 'fetch_all_orders' | 'fetch_all_reports' | 'fetch_all_threads' | 'fetch_application_by_short_name' | 'fetch_applications_by_owner_id' | 'fetch_comment_stats' | 'fetch_comments' | 'fetch_comments_by_application_id' | 'fetch_comments_by_application_short_name' | 'fetch_comments_by_thread_id' | 'fetch_notifications' | 'fetch_notifications_by_application_id' | 'fetch_notifications_by_short_name' | 'fetch_notifications_by_user_id' | 'fetch_threads_by_user_id' | 'fetch_users' | 'find_one_application_by_id' | 'find_one_application_by_name' | 'find_one_thread_or_create_one' | 'find_profile' | 'find_thread_by_id' | 'is_user_subscribed_to_thread' | 'resend_email_code' | 'search_user_by_email' | QueryKeySpecifier)[];
 export type QueryFieldPolicy = {
 	current_user?: FieldPolicy<any> | FieldReadFunction<any>,
 	fetch_all_applications?: FieldPolicy<any> | FieldReadFunction<any>,
 	fetch_all_orders?: FieldPolicy<any> | FieldReadFunction<any>,
+	fetch_all_reports?: FieldPolicy<any> | FieldReadFunction<any>,
 	fetch_all_threads?: FieldPolicy<any> | FieldReadFunction<any>,
 	fetch_application_by_short_name?: FieldPolicy<any> | FieldReadFunction<any>,
 	fetch_applications_by_owner_id?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -1949,6 +2027,16 @@ export type StandardResponseModelKeySpecifier = ('message' | 'success' | Standar
 export type StandardResponseModelFieldPolicy = {
 	message?: FieldPolicy<any> | FieldReadFunction<any>,
 	success?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type SubscriptionEntityKeySpecifier = ('created_at' | 'id' | 'idempotency_key' | 'order_id' | 'renewal' | 'renewal_date' | 'updated_at' | SubscriptionEntityKeySpecifier)[];
+export type SubscriptionEntityFieldPolicy = {
+	created_at?: FieldPolicy<any> | FieldReadFunction<any>,
+	id?: FieldPolicy<any> | FieldReadFunction<any>,
+	idempotency_key?: FieldPolicy<any> | FieldReadFunction<any>,
+	order_id?: FieldPolicy<any> | FieldReadFunction<any>,
+	renewal?: FieldPolicy<any> | FieldReadFunction<any>,
+	renewal_date?: FieldPolicy<any> | FieldReadFunction<any>,
+	updated_at?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type ThreadModelKeySpecifier = ('application_id' | 'commenters_ids' | 'id' | 'parent_application' | 'pinned_comment' | 'pinned_comment_id' | 'poll' | 'subscribed_users' | 'subscribed_users_ids' | 'thread_comments' | 'thread_stats' | 'title' | 'website_url' | ThreadModelKeySpecifier)[];
 export type ThreadModelFieldPolicy = {
@@ -2108,6 +2196,10 @@ export type StrictTypedTypePolicies = {
 	StandardResponseModel?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | StandardResponseModelKeySpecifier | (() => undefined | StandardResponseModelKeySpecifier),
 		fields?: StandardResponseModelFieldPolicy,
+	},
+	SubscriptionEntity?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | SubscriptionEntityKeySpecifier | (() => undefined | SubscriptionEntityKeySpecifier),
+		fields?: SubscriptionEntityFieldPolicy,
 	},
 	ThreadModel?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | ThreadModelKeySpecifier | (() => undefined | ThreadModelKeySpecifier),
