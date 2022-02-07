@@ -17,7 +17,7 @@ describe('Mutation Tests', () => {
     let reply_comment_id: string
     const plain_text_body = 'This is test for comments'
     const plain_text_reply = 'This is test for replies'
-    const application_id = 'bfd6af4a-86b1-46a7-a1ad-b8fa9e90fbdd'
+    const application_id = '19b32b1b-1e94-45bf-addf-ae4b1872f692'
 
     beforeAll(async () => {
         commentApi = new CommentAPI(
@@ -158,6 +158,20 @@ describe('Mutation Tests', () => {
         }
     })
 
+    it('upvote comment', async () => {
+        const result = await commentMutations.upVoteComment(comment_id)
+
+        expect(result.data?.up_vote_comment.up_vote).toHaveLength(1)
+    })
+
+    it('downvote comment', async () => {
+        const result = await commentMutations.downVoteComment(comment_id)
+
+        console.log(result.data?.down_vote_comment)
+
+        expect(result.data?.down_vote_comment.down_vote).toHaveLength(1)
+    })
+
     afterAll(async () => {
         try {
             const result = await commentApi.client.mutate<
@@ -172,6 +186,8 @@ describe('Mutation Tests', () => {
                     },
                 },
             })
+
+            console.log('RESULT', result)
 
             if (result && result.data) {
                 const { success } = result.data?.delete_many_comments

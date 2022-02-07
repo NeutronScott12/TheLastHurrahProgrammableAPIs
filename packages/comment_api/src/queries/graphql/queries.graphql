@@ -16,6 +16,12 @@ fragment CommentFragment on CommentModel {
     edited
     approved
     reply_notification
+    up_vote {
+        id
+    }
+    down_vote {
+        id
+    }
     _count {
         down_vote
         replies

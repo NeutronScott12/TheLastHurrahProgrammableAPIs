@@ -45,6 +45,15 @@ export const editComment = async (
                 },
             },
             update(cache, { data }) {
+                console.log(
+                    'EDIT_INPUT',
+                    thread_id,
+                    limit,
+                    skip,
+                    application_short_name,
+                    sort,
+                )
+
                 const response = fetchCommentByThreadIdQueryCache({
                     thread_id,
                     limit,
@@ -53,6 +62,8 @@ export const editComment = async (
                     sort,
                     cache: global.cache,
                 })
+
+                console.log('EDIT_COMMENT_RESPONSE', response)
 
                 if (
                     response &&
