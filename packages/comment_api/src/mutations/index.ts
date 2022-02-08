@@ -4,7 +4,6 @@ import {
     InMemoryCache,
     NormalizedCacheObject,
 } from '@apollo/client'
-import { T } from 'ramda'
 
 import {
     CreateCommentInput,

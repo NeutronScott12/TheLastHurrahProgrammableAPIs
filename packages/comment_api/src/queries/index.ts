@@ -14,9 +14,12 @@ export class CommentQueries {
 
     public async fetch_comemnts() {
         try {
+            // console.log('CLIENT', this.client)
             const response = await this.client.query<FetchCommentsQuery>({
                 query: FetchCommentsDocument,
             })
+
+            // console.log('RESPONSE', response)
 
             return response.data
         } catch (error) {
@@ -24,7 +27,9 @@ export class CommentQueries {
                 throw new ApolloError(error)
             }
 
-            throw new Error('Something really bad happened at fetch_commentss')
+            throw new Error(
+                `Something really bad happened at fetch_comments - ${error}`,
+            )
         }
     }
 }
