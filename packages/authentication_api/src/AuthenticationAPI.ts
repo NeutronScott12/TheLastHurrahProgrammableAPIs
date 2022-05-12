@@ -10,12 +10,14 @@ import { isBrowser } from 'browser-or-node'
 // import ws from 'ws'
 
 import { AuthenticationQueries } from './queries'
+import { AuthenticationMutations } from './mutation'
 
 export class AuthenticationAPI {
     public client: ApolloClient<NormalizedCacheObject>
     cache: InMemoryCache
     application_short_name: string
     queries: AuthenticationQueries
+    mutations: AuthenticationMutations
 
     constructor(
         uri: string,
@@ -99,5 +101,9 @@ export class AuthenticationAPI {
 
     private bootstrap() {
         this.queries = new AuthenticationQueries(this.client)
+        this.mutations = new AuthenticationMutations({
+            client: this.client,
+            cache: this.cache,
+        })
     }
 }

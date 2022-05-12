@@ -1,5 +1,6 @@
 import { InMemoryCache } from '@apollo/client'
-import * as faker from 'faker'
+
+import { faker } from '@faker-js/faker'
 
 import { AuthenticationMutations } from '../index'
 import { AuthenticationAPI } from '../../AuthenticationAPI'
