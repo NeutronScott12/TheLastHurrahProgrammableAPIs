@@ -39,7 +39,7 @@ export class AuthenticationAPI {
             token = process.env.JSON_TOKEN as string
         }
 
-        if (!token) {
+        if (!token && !isBrowser) {
             throw new Error('Token is required')
         }
 
