@@ -23,10 +23,7 @@ describe('Authentication Tests', () => {
 
         const cache = new InMemoryCache()
 
-        mutations = new AuthenticationMutations({
-            client: authApi.client,
-            cache,
-        })
+        mutations = authApi.mutations
     })
 
     it('Register', async () => {

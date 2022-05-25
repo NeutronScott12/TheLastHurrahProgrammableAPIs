@@ -15,7 +15,7 @@ export const login = async (
     FetchResult<LoginMutation, Record<string, any>, Record<string, any>>
 > => {
     try {
-        const { client } = global
+        const { client, application_short_name } = global
         const { email, password } = args
 
         return client.mutate<LoginMutation, LoginMutationVariables>({
@@ -24,6 +24,7 @@ export const login = async (
                 loginInput: {
                     password,
                     email,
+                    application_short_name,
                 },
             },
         })

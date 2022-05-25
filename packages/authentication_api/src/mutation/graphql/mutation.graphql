@@ -17,6 +17,7 @@ mutation Registration($registrationInput: RegistrationInput!) {
 input LoginInput {
     username: String!
     email: String!
+    application_short_name: String
 }
 
 fragment LoginResponseFragment on LoginResponse {

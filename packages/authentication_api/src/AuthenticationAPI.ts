@@ -102,6 +102,7 @@ export class AuthenticationAPI {
     private bootstrap() {
         this.queries = new AuthenticationQueries(this.client)
         this.mutations = new AuthenticationMutations({
+            application_short_name: this.application_short_name,
             client: this.client,
             cache: this.cache,
         })

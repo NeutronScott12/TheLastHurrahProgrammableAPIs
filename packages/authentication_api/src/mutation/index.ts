@@ -31,8 +31,10 @@ import {
 export class AuthenticationMutations {
     client: ApolloClient<NormalizedCacheObject>
     cache: InMemoryCache
+    application_short_name: string
 
-    constructor({ client, cache }: IAuthenticationAPI) {
+    constructor({ client, cache, application_short_name }: IAuthenticationAPI) {
+        this.application_short_name = application_short_name
         this.client = client
         this.cache = cache
     }
