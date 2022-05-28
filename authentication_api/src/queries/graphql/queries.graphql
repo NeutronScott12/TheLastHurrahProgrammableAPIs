@@ -1,6 +1,0 @@
-query CurrentUser {
-    current_user {
-        id
-        username
-    }
-}

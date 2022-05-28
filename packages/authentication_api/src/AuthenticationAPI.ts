@@ -1,16 +1,14 @@
-require('dotenv').config()
-
-import { ApolloClient, createHttpLink, split } from '@apollo/client/core'
+import { ApolloClient, createHttpLink } from '@apollo/client/core'
 import { NormalizedCacheObject, InMemoryCache } from '@apollo/client/cache'
 import { setContext } from '@apollo/client/link/context'
 import fetch from 'cross-fetch'
-// import { getMainDefinition } from '@apollo/client/utilities'
-// import { WebSocketLink } from '@apollo/client/link/ws'
 import { isBrowser } from 'browser-or-node'
-// import ws from 'ws'
 
 import { AuthenticationQueries } from './queries'
 import { AuthenticationMutations } from './mutation'
+
+const TEST_TOKEN =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVhOGZkMzc2LWI0MjMtNGU3Yi1hOWQzLWMyOWEwYjliM2MwZSIsInVzZXJuYW1lIjoic2NvdHQiLCJlbWFpbCI6InNjb3R0YmVycnk5MUBnbWFpbC5jb20iLCJjb25maXJtZWQiOnRydWUsImlhdCI6MTY1MzM5OTMzNSwiZXhwIjoxNjU0MDA0MTM1fQ.0G9aWoUywXbr98AntjkG-MRyisfUskIXD_kUzqMdkdw'
 
 export class AuthenticationAPI {
     public client: ApolloClient<NormalizedCacheObject>
@@ -36,7 +34,7 @@ export class AuthenticationAPI {
         if (isBrowser) {
             token = localStorage.getItem('binary-stash-token')
         } else {
-            token = process.env.JSON_TOKEN as string
+            token = TEST_TOKEN
         }
 
         if (!token && !isBrowser) {
