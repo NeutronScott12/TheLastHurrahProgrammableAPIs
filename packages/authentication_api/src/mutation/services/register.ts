@@ -14,6 +14,8 @@ export const regsiter = (args: IRegisterArgs, global: IAuthenticationAPI) => {
         const newArgs = omit(['repeat_password'], args)
 
         console.log('APPLICATION_SHORT_NAME', application_short_name)
+        console.log('ARGUMENTS', args)
+        console.log('CLIENT', client)
 
         return client.mutate<
             RegistrationMutation,
@@ -28,6 +30,6 @@ export const regsiter = (args: IRegisterArgs, global: IAuthenticationAPI) => {
             },
         })
     } catch (error) {
-        throw new Error()
+        throw new Error(`Error ${error}`)
     }
 }

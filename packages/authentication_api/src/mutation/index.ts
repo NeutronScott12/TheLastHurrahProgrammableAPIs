@@ -34,6 +34,10 @@ export class AuthenticationMutations {
     application_short_name: string
 
     constructor({ client, cache, application_short_name }: IAuthenticationAPI) {
+        console.log(
+            'AuthenticationMutations.constructor',
+            application_short_name,
+        )
         this.application_short_name = application_short_name
         this.client = client
         this.cache = cache
