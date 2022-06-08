@@ -1,8 +1,7 @@
 import React, { createContext } from 'react'
-import {
-    AuthenticationAPI,
-    AuthenticationMutations,
-} from '@thelasthurrah/authentication_api'
+import { AuthenticationAPI } from '../AuthenticationAPI'
+import { AuthenticationMutations } from '../mutation'
+import { AuthenticationQueries } from '../queries'
 
 interface IBinaryStashProvider {
     children?: React.ReactNode
@@ -11,6 +10,7 @@ interface IBinaryStashProvider {
 
 export interface IAuthenticationProvider {
     mutations: AuthenticationMutations
+    queries: AuthenticationQueries
 }
 
 export const AuthenticationAPIProvider = createContext({})
