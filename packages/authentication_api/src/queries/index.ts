@@ -21,6 +21,7 @@ export class AuthenticationQueries {
 
             return result
         } catch (error) {
+            console.log('ERROR: ', error)
             throw new ApolloError({})
         }
     }

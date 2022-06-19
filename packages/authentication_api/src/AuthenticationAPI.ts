@@ -8,7 +8,7 @@ import { AuthenticationQueries } from './queries'
 import { AuthenticationMutations } from './mutation'
 
 const TEST_TOKEN =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcxNTdmM2RiLTNhNzktNDNlMC1hM2ZlLTA3NjhhMWRjODZiYiIsInVzZXJuYW1lIjoic2NvdHQiLCJlbWFpbCI6InNjb3R0YmVycnk5MUBnbWFpbC5jb20iLCJjb25maXJtZWQiOnRydWUsImlhdCI6MTY1NTEyMDcyNiwiZXhwIjoxNjU1NzI1NTI2fQ.o9zcGN6ACW4dNiRo1-Q7rFjud0VAGZ2iIXs9X8DTN1U'
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNzE1N2YzZGItM2E3OS00M2UwLWEzZmUtMDc2OGExZGM4NmJiIiwidXNlcm5hbWUiOiJzY290dCIsImVtYWlsIjoic2NvdHRiZXJyeTkxQGdtYWlsLmNvbSIsImNvbmZpcm1lZCI6dHJ1ZSwiaWF0IjoxNjU1NjQxMTA3LCJleHAiOjE2NTYyNDU5MDd9.kN6kitkak2kxCA-rtIkuEdV2vozBN-4E1DzD2Kb7TFs'
 
 export class AuthenticationAPI {
     public client: ApolloClient<NormalizedCacheObject>

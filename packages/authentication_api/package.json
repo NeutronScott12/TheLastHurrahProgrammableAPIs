@@ -1,6 +1,6 @@
 {
     "name": "@thelasthurrah/authentication_api",
-    "version": "0.1.18",
+    "version": "0.1.20",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "license": "MIT",
@@ -38,20 +38,26 @@
         "@graphql-codegen/typescript-apollo-client-helpers": "^2.1.20",
         "@graphql-codegen/typescript-operations": "2.4.2",
         "@graphql-codegen/typescript-react-apollo": "3.2.16",
-        "@parcel/packager-ts": "^2.6.0",
-        "@parcel/transformer-typescript-types": "^2.6.0",
-        "@types/jest": "^28.1.1",
+        "@parcel/packager-ts": "^2.6.1",
+        "@parcel/transformer-typescript-types": "^2.6.1",
+        "@types/jest": "^28.1.2",
         "@types/node": "^18.0.0",
         "@types/ramda": "^0.28.13",
-        "@types/react": "^18.0.13",
+        "@types/react": "^18.0.14",
         "@types/yup": "^0.29.14",
         "jest": "^28.1.1",
-        "parcel": "^2.6.0",
+        "parcel": "^2.6.1",
         "react": "^18.2.0",
         "ts-jest": "^28.0.5",
         "ts-node": "^10.8.0",
         "ts-node-dev": "^2.0.0",
-        "typescript": "^4.7.2"
+        "typescript": "^4.7.4"
+    },
+    "peerDependencies": {
+        "graphql": "^14.0.0 || ^15.0.0 || ^16.0.0",
+        "graphql-ws": "^5.5.5",
+        "react": "^16.8.0 || ^17.0.0 || ^18.0.0",
+        "subscriptions-transport-ws": "^0.9.0 || ^0.11.0"
     },
     "workspaces": {
         "nohoist": [
