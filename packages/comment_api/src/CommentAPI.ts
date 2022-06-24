@@ -66,7 +66,8 @@ export class CommentAPI {
                 },
             })
         } else {
-            token = process.env.JSON_TOKEN as string
+            token =
+                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNzE1N2YzZGItM2E3OS00M2UwLWEzZmUtMDc2OGExZGM4NmJiIiwidXNlcm5hbWUiOiJzY290dCIsImVtYWlsIjoic2NvdHRiZXJyeTkxQGdtYWlsLmNvbSIsImNvbmZpcm1lZCI6dHJ1ZSwiYXBwbGljYXRpb25faWQiOiI2MDY0ZWIwYy0wOGM5LTRkZWEtODdlNy04OTU3NGEyMTA2NDQiLCJpYXQiOjE2NTYwMTA1OTAsImV4cCI6MTY1NjYxNTM5MH0.zZdkSHivj7xCTRVbZE-pjnHcuW1Jb_o2AGVuAamVMMI'
             try {
                 // let ws = await import('ws')
                 httpLink = createHttpLink({
