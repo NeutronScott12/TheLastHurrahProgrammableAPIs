@@ -54,6 +54,8 @@ export const editComment = async (
                     sort,
                 )
 
+                // console.log('CACHE', cache)
+
                 const response = fetchCommentByThreadIdQueryCache({
                     thread_id,
                     limit,

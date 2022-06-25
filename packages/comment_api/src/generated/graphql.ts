@@ -14,11 +14,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** Big Int Custom Scalar */
   BigInt: any;
-  /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
   DateTime: any;
-  /** The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSONObject: any;
 };
 
@@ -149,7 +146,7 @@ export type ChangePasswordInput = {
 };
 
 export type ChangeSubscriptionPlanInput = {
-  plan: Scalars['String'];
+  id: Scalars['String'];
 };
 
 export type ClosePollInput = {
@@ -274,6 +271,10 @@ export type DeletePollInput = {
   thread_id: Scalars['String'];
 };
 
+export type DeleteThreadInput = {
+  id: Scalars['String'];
+};
+
 export type DeleteUserInput = {
   email: Scalars['String'];
 };
@@ -393,6 +394,7 @@ export enum Language {
 }
 
 export type LoginInput = {
+  application_short_name?: InputMaybe<Scalars['String']>;
   email: Scalars['String'];
   password: Scalars['String'];
 };
@@ -437,6 +439,7 @@ export type Mutation = {
   delete_notification: StandardResponse;
   delete_poll: StandardResponseModel;
   delete_report_by_id: StandardResponseModel;
+  delete_thread_by_id: StandardResponseModel;
   delete_user: StandardResponseModel;
   down_vote_comment: CommentModel;
   forgot_password: StandardResponseModel;
@@ -585,6 +588,11 @@ export type MutationDelete_PollArgs = {
 
 export type MutationDelete_Report_By_IdArgs = {
   id: Scalars['String'];
+};
+
+
+export type MutationDelete_Thread_By_IdArgs = {
+  deleteThreadInput: DeleteThreadInput;
 };
 
 
@@ -913,6 +921,7 @@ export type RefundOrderInput = {
 
 export type RegistrationInput = {
   application_id?: InputMaybe<Scalars['String']>;
+  application_short_name?: InputMaybe<Scalars['String']>;
   email: Scalars['String'];
   password: Scalars['String'];
   redirect_url?: InputMaybe<Scalars['String']>;
@@ -1022,6 +1031,7 @@ export type ToggleSubscriptionToThreadInput = {
 };
 
 export type TwoFactorInput = {
+  application_short_name?: InputMaybe<Scalars['String']>;
   email: Scalars['String'];
   two_factor_id: Scalars['String'];
 };
@@ -1144,6 +1154,13 @@ export enum Where {
   Pending = 'PENDING',
   Spam = 'SPAM'
 }
+
+export type DeleteThreadByIdMutationVariables = Exact<{
+  deleteThreadInput: DeleteThreadInput;
+}>;
+
+
+export type DeleteThreadByIdMutation = { __typename?: 'Mutation', delete_thread_by_id: { __typename?: 'StandardResponseModel', success: boolean, message: string } };
 
 export type CreateThreadComentMutationVariables = Exact<{
   createCommentInput: CreateCommentInput;
@@ -1305,6 +1322,40 @@ export const CommentFragmentFragmentDoc = gql`
   }
 }
     `;
+export const DeleteThreadByIdDocument = gql`
+    mutation DeleteThreadById($deleteThreadInput: DeleteThreadInput!) {
+  delete_thread_by_id(deleteThreadInput: $deleteThreadInput) {
+    success
+    message
+  }
+}
+    `;
+export type DeleteThreadByIdMutationFn = Apollo.MutationFunction<DeleteThreadByIdMutation, DeleteThreadByIdMutationVariables>;
+
+/**
+ * __useDeleteThreadByIdMutation__
+ *
+ * To run a mutation, you first call `useDeleteThreadByIdMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteThreadByIdMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteThreadByIdMutation, { data, loading, error }] = useDeleteThreadByIdMutation({
+ *   variables: {
+ *      deleteThreadInput: // value for 'deleteThreadInput'
+ *   },
+ * });
+ */
+export function useDeleteThreadByIdMutation(baseOptions?: Apollo.MutationHookOptions<DeleteThreadByIdMutation, DeleteThreadByIdMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteThreadByIdMutation, DeleteThreadByIdMutationVariables>(DeleteThreadByIdDocument, options);
+      }
+export type DeleteThreadByIdMutationHookResult = ReturnType<typeof useDeleteThreadByIdMutation>;
+export type DeleteThreadByIdMutationResult = Apollo.MutationResult<DeleteThreadByIdMutation>;
+export type DeleteThreadByIdMutationOptions = Apollo.BaseMutationOptions<DeleteThreadByIdMutation, DeleteThreadByIdMutationVariables>;
 export const CreateThreadComentDocument = gql`
     mutation CreateThreadComent($createCommentInput: CreateCommentInput!) {
   create_comment(CreateCommentInput: $createCommentInput) {
@@ -1864,7 +1915,7 @@ export type LoginResponseFieldPolicy = {
 	two_factor_authentication?: FieldPolicy<any> | FieldReadFunction<any>,
 	user?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type MutationKeySpecifier = ('add_application_moderator' | 'add_pinned_comment' | 'add_user_to_shadow_ban' | 'add_user_to_threads_active_users' | 'approve_comments' | 'block_user' | 'block_users_from_application' | 'cancel_order' | 'cancel_subscription_plan' | 'change_comment_settings' | 'change_password' | 'change_subscription_plan' | 'close_poll' | 'confirm_user' | 'create_application' | 'create_comment' | 'create_order' | 'create_poll' | 'create_reply_comment' | 'create_report' | 'delete_comment' | 'delete_many_comments' | 'delete_many_notifications' | 'delete_notification' | 'delete_poll' | 'delete_report_by_id' | 'delete_user' | 'down_vote_comment' | 'forgot_password' | 'login_user' | 'logout_user' | 'refund_order' | 'regenerate_new_auth_secret' | 'register_user' | 'remove_application' | 'remove_application_moderator' | 'remove_user_from_threads_active_users' | 'remove_users_from_shadow_ban' | 'toggle_subscription_to_thread' | 'two_factor_login' | 'unblock_user' | 'unblock_users_from_application' | 'up_vote_comment' | 'update_application' | 'update_application_comment_rules' | 'update_comment' | 'update_poll_vote' | 'update_user' | 'upgrade_subscription_plan' | MutationKeySpecifier)[];
+export type MutationKeySpecifier = ('add_application_moderator' | 'add_pinned_comment' | 'add_user_to_shadow_ban' | 'add_user_to_threads_active_users' | 'approve_comments' | 'block_user' | 'block_users_from_application' | 'cancel_order' | 'cancel_subscription_plan' | 'change_comment_settings' | 'change_password' | 'change_subscription_plan' | 'close_poll' | 'confirm_user' | 'create_application' | 'create_comment' | 'create_order' | 'create_poll' | 'create_reply_comment' | 'create_report' | 'delete_comment' | 'delete_many_comments' | 'delete_many_notifications' | 'delete_notification' | 'delete_poll' | 'delete_report_by_id' | 'delete_thread_by_id' | 'delete_user' | 'down_vote_comment' | 'forgot_password' | 'login_user' | 'logout_user' | 'refund_order' | 'regenerate_new_auth_secret' | 'register_user' | 'remove_application' | 'remove_application_moderator' | 'remove_user_from_threads_active_users' | 'remove_users_from_shadow_ban' | 'toggle_subscription_to_thread' | 'two_factor_login' | 'unblock_user' | 'unblock_users_from_application' | 'up_vote_comment' | 'update_application' | 'update_application_comment_rules' | 'update_comment' | 'update_poll_vote' | 'update_user' | 'upgrade_subscription_plan' | MutationKeySpecifier)[];
 export type MutationFieldPolicy = {
 	add_application_moderator?: FieldPolicy<any> | FieldReadFunction<any>,
 	add_pinned_comment?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -1892,6 +1943,7 @@ export type MutationFieldPolicy = {
 	delete_notification?: FieldPolicy<any> | FieldReadFunction<any>,
 	delete_poll?: FieldPolicy<any> | FieldReadFunction<any>,
 	delete_report_by_id?: FieldPolicy<any> | FieldReadFunction<any>,
+	delete_thread_by_id?: FieldPolicy<any> | FieldReadFunction<any>,
 	delete_user?: FieldPolicy<any> | FieldReadFunction<any>,
 	down_vote_comment?: FieldPolicy<any> | FieldReadFunction<any>,
 	forgot_password?: FieldPolicy<any> | FieldReadFunction<any>,

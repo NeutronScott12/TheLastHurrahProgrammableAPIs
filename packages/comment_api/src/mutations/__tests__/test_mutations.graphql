@@ -1,0 +1,10 @@
+input DeleteThreadInput {
+    id: String!
+}
+
+mutation DeleteThreadById($deleteThreadInput: DeleteThreadInput!) {
+    delete_thread_by_id(deleteThreadInput: $deleteThreadInput) {
+        success
+        message
+    }
+}

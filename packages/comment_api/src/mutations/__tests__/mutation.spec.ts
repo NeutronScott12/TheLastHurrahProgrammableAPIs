@@ -1,8 +1,14 @@
+import { faker } from '@faker-js/faker'
+
 import { CommentAPI } from '../../CommentAPI'
 import {
     DeleteManyCommentsDocument,
     DeleteManyCommentsMutation,
+    DeleteManyCommentsMutationFn,
     DeleteManyCommentsMutationVariables,
+    DeleteThreadByIdDocument,
+    DeleteThreadByIdMutation,
+    DeleteThreadByIdMutationVariables,
     Sort,
 } from '../../generated/graphql'
 import { CommentMutations } from '../index'
@@ -14,12 +20,13 @@ describe('Mutation Tests', () => {
     let comment_id: string
     let thread_id: string
     let comment_author_id: string
+    let thread: any
     let reply_comment_id: string
     const plain_text_body = 'This is test for comments'
     const plain_text_reply = 'This is test for replies'
-    const application_id = '19b32b1b-1e94-45bf-addf-ae4b1872f692'
+    const application_id = '6064eb0c-08c9-4dea-87e7-89574a210644'
 
-    beforeAll(async () => {
+    beforeEach(async () => {
         commentApi = new CommentAPI(
             'http://localhost:4000/graphql',
             'first-application',
@@ -34,7 +41,7 @@ describe('Mutation Tests', () => {
             cache: commentApi.cache,
         })
 
-        const thread = await commentMutations.findOneOrCreateOneThread({
+        thread = await commentMutations.findOneOrCreateOneThread({
             application_id,
             title: 'practice title',
             website_url: 'localhost:3000',
@@ -48,6 +55,7 @@ describe('Mutation Tests', () => {
     })
 
     it('Create Comment', async () => {
+        console.log('thread', thread)
         const comment = await commentMutations.createComment({
             application_id,
             json_body: [
@@ -61,6 +69,8 @@ describe('Mutation Tests', () => {
             plain_text_body,
             thread_id,
         })
+
+        console.log('COMMENT', comment)
 
         if (comment && comment.data) {
             const {
@@ -111,7 +121,10 @@ describe('Mutation Tests', () => {
     })
 
     it('Edit Comment', async () => {
-        const edited_comment = 'Changed comment'
+        const edited_comment = faker.lorem.sentence()
+
+        console.log('COMMENT_ID', comment_id)
+
         const result = await commentMutations.editComment({
             comment_id,
             json_body: [
@@ -191,6 +204,26 @@ describe('Mutation Tests', () => {
 
             if (result && result.data) {
                 const { success } = result.data?.delete_many_comments
+
+                expect(success).toBeTruthy()
+            }
+
+            const thread_result = await commentApi.client.mutate<
+                DeleteThreadByIdMutation,
+                DeleteThreadByIdMutationVariables
+            >({
+                mutation: DeleteThreadByIdDocument,
+                variables: {
+                    deleteThreadInput: {
+                        id: thread_id,
+                    },
+                },
+            })
+
+            console.log('THREAD_RESULT', thread_result)
+
+            if (thread_result && thread_result.data) {
+                const { success } = thread_result.data.delete_thread_by_id
 
                 expect(success).toBeTruthy()
             }
