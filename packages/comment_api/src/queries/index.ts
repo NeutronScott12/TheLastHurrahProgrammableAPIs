@@ -1,6 +1,7 @@
 import {
     ApolloClient,
     ApolloError,
+    ApolloQueryResult,
     NormalizedCacheObject,
 } from '@apollo/client'
 import { FetchCommentsQuery, FetchCommentsDocument } from '../generated/graphql'
@@ -12,17 +13,21 @@ export class CommentQueries {
         this.client = client
     }
 
-    public async fetch_comemnts() {
+    public async fetch_comemnts(): Promise<
+        ApolloQueryResult<FetchCommentsQuery>
+    > {
         try {
-            // console.log('CLIENT', this.client)
+            console.log('FETCH_COMEMNT_CLIENT', this.client)
+            console.log('FETCH_COMMENT_CLIENT_QUERY', this.client.query)
             const response = await this.client.query<FetchCommentsQuery>({
                 query: FetchCommentsDocument,
             })
 
-            // console.log('RESPONSE', response)
+            console.log('RESPONSE', response)
 
-            return response.data
+            return response
         } catch (error) {
+            console.log('ERROR', error)
             if (error instanceof ApolloError) {
                 throw new ApolloError(error)
             }

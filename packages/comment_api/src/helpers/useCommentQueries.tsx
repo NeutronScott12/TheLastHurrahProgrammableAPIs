@@ -6,10 +6,10 @@ import {
     ICommentProvider,
 } from './BinaryStashCommentProvider'
 
-export const useBinaryCommentMutations = (): CommentQueries => {
+export function useBinaryCommentQueries(): CommentQueries {
     const client = useContext(CommentAPIProvider) as ICommentProvider
 
-    // console.log('CLIENT', client)
+    console.log('USE_BINARY_COMMENT_QUERIES : CLIENT', client)
 
     return client.queries
 }

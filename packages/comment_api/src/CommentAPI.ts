@@ -17,31 +17,52 @@ import { CommentQueries } from './queries'
 import { CommentMutations } from './mutations'
 import { Sort } from './generated/graphql'
 
-export class CommentAPI {
-    public client: ApolloClient<NormalizedCacheObject>
-    cache: InMemoryCache
-    queries: CommentQueries
-    mutations: CommentMutations
+interface ICommentAPIArgs {
+    http_uri: string
+    web_socket_uri: string
     application_short_name: string
+    cache?: InMemoryCache
+}
 
-    constructor(
-        uri: string,
-        application_short_name: string,
-        cache?: InMemoryCache,
-    ) {
+const TEST_TOKEN =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNzE1N2YzZGItM2E3OS00M2UwLWEzZmUtMDc2OGExZGM4NmJiIiwidXNlcm5hbWUiOiJzY290dCIsImVtYWlsIjoic2NvdHRiZXJyeTkxQGdtYWlsLmNvbSIsImNvbmZpcm1lZCI6dHJ1ZSwiYXBwbGljYXRpb25faWQiOiI2MDY0ZWIwYy0wOGM5LTRkZWEtODdlNy04OTU3NGEyMTA2NDQiLCJpYXQiOjE2NTYwMTA1OTAsImV4cCI6MTY1NjYxNTM5MH0.zZdkSHivj7xCTRVbZE-pjnHcuW1Jb_o2AGVuAamVMMI'
+
+export class CommentAPI {
+    private static instance: CommentAPI
+
+    public client: ApolloClient<NormalizedCacheObject>
+    public queries: CommentQueries
+    public mutations: CommentMutations
+    cache: InMemoryCache
+    application_short_name: string
+    webSocketUrl: string
+    token: string | null
+
+    constructor({
+        http_uri,
+        web_socket_uri,
+        application_short_name,
+        cache,
+    }: ICommentAPIArgs) {
         this.application_short_name = application_short_name
-        this.generateClient(uri, cache!)
+        this.webSocketUrl = web_socket_uri
+        this.generateClient(http_uri, cache!)
         this.bootstrap()
     }
 
     private generateClient(uri: string, cache: InMemoryCache) {
-        let token: string | null
-        const subUri =
-            process.env.NODE_ENV === 'production'
-                ? 'wss://lasthurrah.co.uk/ws-graphql'
-                : 'ws://localhost:4003/graphql'
+        const subUri = this.webSocketUrl
+
+        console.log('SUB_URI', subUri)
+
         let httpLink: ApolloLink
         let wsLink: WebSocketLink
+
+        if (isBrowser) {
+            this.token = localStorage.getItem('binary-stash-token')
+        } else {
+            this.token = TEST_TOKEN
+        }
 
         if (!cache) {
             this.cache = new InMemoryCache({})
@@ -49,10 +70,12 @@ export class CommentAPI {
             this.cache = cache
         }
 
-        if (isBrowser) {
-            token = localStorage.getItem('binary-stash-token')
+        if (!this.token && !isBrowser) {
+            throw new Error('Token is required')
+        }
 
-            httpLink = httpLink = createHttpLink({
+        if (isBrowser) {
+            httpLink = createHttpLink({
                 uri,
             })
 
@@ -61,13 +84,11 @@ export class CommentAPI {
                 options: {
                     reconnect: true,
                     connectionParams: {
-                        Authorization: `Bearer ${token}`,
+                        Authorization: `Bearer ${this.token}`,
                     },
                 },
             })
         } else {
-            token =
-                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNzE1N2YzZGItM2E3OS00M2UwLWEzZmUtMDc2OGExZGM4NmJiIiwidXNlcm5hbWUiOiJzY290dCIsImVtYWlsIjoic2NvdHRiZXJyeTkxQGdtYWlsLmNvbSIsImNvbmZpcm1lZCI6dHJ1ZSwiYXBwbGljYXRpb25faWQiOiI2MDY0ZWIwYy0wOGM5LTRkZWEtODdlNy04OTU3NGEyMTA2NDQiLCJpYXQiOjE2NTYwMTA1OTAsImV4cCI6MTY1NjYxNTM5MH0.zZdkSHivj7xCTRVbZE-pjnHcuW1Jb_o2AGVuAamVMMI'
             try {
                 // let ws = await import('ws')
                 httpLink = createHttpLink({
@@ -91,15 +112,11 @@ export class CommentAPI {
             }
         }
 
-        if (!token) {
-            throw new Error('Token is required')
-        }
-
         const authLink = setContext((_, { headers }) => {
             return {
                 headers: {
                     ...headers,
-                    authorization: 'token' ? `Bearer ${token}` : '',
+                    authorization: 'token' ? `Bearer ${this.token}` : '',
                 },
             }
         })
@@ -119,6 +136,8 @@ export class CommentAPI {
                 authHttpLink,
             )
 
+            console.log('CLIENT BROWSER STARTING')
+
             this.client = new ApolloClient({
                 // link: authHttpLink,
                 link: splitLink,
@@ -136,6 +155,7 @@ export class CommentAPI {
     }
 
     private bootstrap() {
+        console.log('BOOTSTRAPING COMMENT API CLIENT', this.client)
         this.queries = new CommentQueries(this.client)
         this.mutations = new CommentMutations({
             application_short_name: this.application_short_name,
@@ -146,12 +166,24 @@ export class CommentAPI {
             sort: Sort.Asc,
         })
     }
+
+    public static getInstance(): CommentAPI {
+        if (!CommentAPI.instance) {
+            CommentAPI.instance = new CommentAPI({
+                http_uri: 'http://localhost:4000/graphql',
+                web_socket_uri: 'ws://localhost:4003/graphql',
+                application_short_name: 'first-application',
+            })
+        }
+        return CommentAPI.instance
+    }
 }
 
-const commentApi = new CommentAPI(
-    'http://localhost:4000/graphql',
-    'first-application',
-)
+// const commentApi = new CommentAPI({
+//     http_uri: 'http://localhost:4000/graphql',
+//     web_socket_uri: 'ws://localhost:4003/graphql',
+//     application_short_name: 'first-application',
+// })
 
 // commentApi.queries
 //     .fetch_comemnts()

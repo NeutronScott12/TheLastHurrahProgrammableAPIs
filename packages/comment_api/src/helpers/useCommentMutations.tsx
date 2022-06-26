@@ -6,7 +6,7 @@ import {
     ICommentProvider,
 } from './BinaryStashCommentProvider'
 
-export const useBinaryCommentMutations = (): CommentMutations => {
+export function useBinaryCommentMutations(): CommentMutations {
     const client = useContext(CommentAPIProvider) as ICommentProvider
 
     // console.log('CLIENT', client)

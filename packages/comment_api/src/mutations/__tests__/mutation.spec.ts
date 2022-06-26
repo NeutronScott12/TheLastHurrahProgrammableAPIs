@@ -27,10 +27,11 @@ describe('Mutation Tests', () => {
     const application_id = '6064eb0c-08c9-4dea-87e7-89574a210644'
 
     beforeEach(async () => {
-        commentApi = new CommentAPI(
-            'http://localhost:4000/graphql',
-            'first-application',
-        )
+        commentApi = new CommentAPI({
+            http_uri: 'http://localhost:4000/graphql',
+            web_socket_uri: 'ws://localhost:4003/graphql',
+            application_short_name: 'first-application',
+        })
 
         commentMutations = new CommentMutations({
             client: commentApi.client,

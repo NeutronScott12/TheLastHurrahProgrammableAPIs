@@ -15,13 +15,15 @@ export interface ICommentProvider {
 
 export const CommentAPIProvider = createContext({})
 
-export const BinaryCommentProvider: React.FC<IBinaryStashProvider> = ({
+export function BinaryCommentProvider({
     children,
     client,
-}) => {
+}: IBinaryStashProvider) {
     return (
         <CommentAPIProvider.Provider value={client}>
             {children}
         </CommentAPIProvider.Provider>
     )
 }
+
+// React.FC<IBinaryStashProvider>
