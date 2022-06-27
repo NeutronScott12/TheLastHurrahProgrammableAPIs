@@ -95,7 +95,7 @@ export class CommentMutations {
                 throw new Error('Incorrect or Incomplete Arguments')
             }
 
-            await editComment(args, { ...self })
+            return await editComment(args, { ...self })
         } catch (error) {
             throw new Error()
         }

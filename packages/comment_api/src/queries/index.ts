@@ -13,9 +13,7 @@ export class CommentQueries {
         this.client = client
     }
 
-    public async fetch_comemnts(): Promise<
-        ApolloQueryResult<FetchCommentsQuery>
-    > {
+    public async fetch_comemnts() {
         try {
             console.log('FETCH_COMEMNT_CLIENT', this.client)
             console.log('FETCH_COMMENT_CLIENT_QUERY', this.client.query)
