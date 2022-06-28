@@ -5,13 +5,13 @@
     "types": "dist/index.d.ts",
     "license": "MIT",
     "scripts": {
-        "prebuild": "npm run build:remove",
         "graphql-codegen": "graphql-codegen --config codegen.yml",
         "test": "jest --runInBand",
         "publish": "cross-env npm run build:prod && npm publish --access=public",
+        "build:ts": "npx tsc",
         "build:remove": "npx rimraf dist",
         "build:prod": "cross-env npm run test && npm run build:remove && npm run build",
-        "build": "npx parcel build ./src/index.ts"
+        "build": "npm run build:ts"
     },
     "dependencies": {
         "@apollo/client": "^3.6.9",

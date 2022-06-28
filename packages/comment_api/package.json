@@ -12,8 +12,9 @@
         "graphql-codegen": "graphql-codegen --config codegen.yml",
         "test": "jest --runInBand",
         "watch": "npx ts-node-dev --respawn --transpile-only src/index.ts",
-        "build:ts": "npx tsc",
         "prebuild": "rimraf dist",
+        "build": "npm run build:parcel",
+        "build:ts": "npx tsc",
         "build:parcel": "npx parcel build ./src/index.ts",
         "prepublish": "npm run build",
         "publish": "npm publish --access=public"
