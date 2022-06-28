@@ -12,7 +12,9 @@
         "graphql-codegen": "graphql-codegen --config codegen.yml",
         "test": "jest --runInBand",
         "watch": "npx ts-node-dev --respawn --transpile-only src/index.ts",
-        "build": "npx parcel build ./src/index.ts",
+        "build:ts": "npx tsc",
+        "prebuild": "rimraf dist",
+        "build:parcel": "npx parcel build ./src/index.ts",
         "prepublish": "npm run build",
         "publish": "npm publish --access=public"
     },
@@ -50,7 +52,8 @@
         "graphql-tag": "^2.12.6",
         "immutable": "^4.1.0",
         "ramda": "^0.28.0",
-        "rimraf": "^3.0.2"
+        "rimraf": "^3.0.2",
+        "ts-loader": "^9.3.1"
     },
     "peerDependencies": {
         "react": "^16.8.0 || ^17.0.0 || ^18.0.0"

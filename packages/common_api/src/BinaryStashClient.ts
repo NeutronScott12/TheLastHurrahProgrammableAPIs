@@ -159,15 +159,15 @@ export class BinaryStashClient {
         console.log('BOOTSTRAPPING BINARY STASH CLIENT')
 
         this.generateClient()
-        // this.comment_queries = new CommentQueries(this.client)
-        // this.comment_mutations = new CommentMutations({
-        //     application_short_name: this.application_short_name,
-        //     cache: this.cache,
-        //     client: this.client,
-        //     limit: 10,
-        //     skip: 0,
-        //     sort: Sort.Asc,
-        // })
+        this.comment_queries = new CommentQueries(this.client)
+        this.comment_mutations = new CommentMutations({
+            application_short_name: this.application_short_name,
+            cache: this.cache,
+            client: this.client,
+            limit: 10,
+            skip: 0,
+            sort: Sort.Asc,
+        })
         this.authentication_queries = new AuthenticationQueries(this.client)
         this.authentication_mutations = new AuthenticationMutations({
             client: this.client,
