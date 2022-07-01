@@ -64,12 +64,11 @@ export class CommentMutations {
 
     public async createComment(args: CreateCommentInput) {
         try {
-            const self = this
             if (!args) {
                 throw new Error('Incorrect or Incomplete Arguments')
             }
 
-            return createComment(args, { ...self })
+            return createComment(args, { ...this })
         } catch (error) {
             throw new ApolloError({})
         }
@@ -77,12 +76,11 @@ export class CommentMutations {
 
     public async createReplyComment(args: CreateReplyCommentInput) {
         try {
-            const self = this
             if (!args) {
                 throw new Error('Incorrect or Incomplete arguments')
             }
 
-            return createReplyComment(args, { ...self })
+            return createReplyComment(args, { ...this })
         } catch (error) {
             throw new ApolloError({})
         }
@@ -90,12 +88,11 @@ export class CommentMutations {
 
     public async editComment(args: IEditCommentArgs) {
         try {
-            const self = this
             if (!args) {
                 throw new Error('Incorrect or Incomplete Arguments')
             }
 
-            return await editComment(args, { ...self })
+            return await editComment(args, { ...this })
         } catch (error) {
             throw new Error()
         }
@@ -103,12 +100,11 @@ export class CommentMutations {
 
     public async deleteComment(args: IDeleteCommentArgs) {
         try {
-            const self = this
             if (!args) {
                 throw new Error('Incorrect or Incomplete Arguments')
             }
 
-            return await deleteComment(args, { ...self })
+            return await deleteComment(args, { ...this })
         } catch (error) {
             throw new ApolloError({})
         }
@@ -121,7 +117,7 @@ export class CommentMutations {
                 throw new Error('Incorrect or Incomplete Arguments')
             }
 
-            return await deleteReplyComment(args, { ...self })
+            return await deleteReplyComment(args, { ...this })
         } catch (error) {
             throw new ApolloError({})
         }
@@ -129,12 +125,11 @@ export class CommentMutations {
 
     public async upVoteComment(comment_id: string) {
         try {
-            const self = this
             if (!comment_id) {
                 throw new Error('Incorrect or Incomplete Arguments')
             }
 
-            return await self.client.mutate<
+            return await this.client.mutate<
                 UpVoteCommentMutation,
                 UpVoteCommentMutationVariables
             >({
@@ -148,12 +143,11 @@ export class CommentMutations {
 
     public async downVoteComment(comment_id: string) {
         try {
-            const self = this
             if (!comment_id) {
                 throw new Error('Incorrect or Incomplete Arguments')
             }
 
-            return self.client.mutate<
+            return this.client.mutate<
                 DownVoteCommentMutation,
                 DownVoteCommentMutationVariables
             >({
@@ -170,12 +164,11 @@ export class CommentMutations {
         report_reason: Report_Reason,
     ) {
         try {
-            const self = this
             if (!comment_id) {
                 throw new Error('Incorrect or Incomplete Arguments')
             }
 
-            return self.client.mutate<
+            return this.client.mutate<
                 CreateCommentReportMutation,
                 CreateCommentReportMutationVariables
             >({

@@ -15,8 +15,8 @@ export class CommentQueries {
 
     public async fetch_comemnts() {
         try {
-            console.log('FETCH_COMEMNT_CLIENT', this.client)
-            console.log('FETCH_COMMENT_CLIENT_QUERY', this.client.query)
+            // console.log('FETCH_COMEMNT_CLIENT', this.client)
+            // console.log('FETCH_COMMENT_CLIENT_QUERY', this.client.query)
             const response = await this.client.query<FetchCommentsQuery>({
                 query: FetchCommentsDocument,
             })

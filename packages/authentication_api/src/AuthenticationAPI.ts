@@ -8,7 +8,7 @@ import { AuthenticationQueries } from './queries'
 import { AuthenticationMutations } from './mutation'
 
 const TEST_TOKEN =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNzE1N2YzZGItM2E3OS00M2UwLWEzZmUtMDc2OGExZGM4NmJiIiwidXNlcm5hbWUiOiJzY290dCIsImVtYWlsIjoic2NvdHRiZXJyeTkxQGdtYWlsLmNvbSIsImNvbmZpcm1lZCI6dHJ1ZSwiaWF0IjoxNjU1NjQxMTA3LCJleHAiOjE2NTYyNDU5MDd9.kN6kitkak2kxCA-rtIkuEdV2vozBN-4E1DzD2Kb7TFs'
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNzE1N2YzZGItM2E3OS00M2UwLWEzZmUtMDc2OGExZGM4NmJiIiwidXNlcm5hbWUiOiJzY290dCIsImVtYWlsIjoic2NvdHRiZXJyeTkxQGdtYWlsLmNvbSIsImNvbmZpcm1lZCI6dHJ1ZSwiaWF0IjoxNjU2NjA0Njc1LCJleHAiOjE2NTcyMDk0NzV9.7nHu2dfQaTC5Oi-8CwwOYd9NEpydQ9dHNFb4zvLoW2U'
 
 export class AuthenticationAPI {
     public client: ApolloClient<NormalizedCacheObject>
@@ -106,3 +106,10 @@ export class AuthenticationAPI {
         })
     }
 }
+
+const authenticationAPI = new AuthenticationAPI(
+    'http://localhost:4000/graphql',
+    'first-application',
+)
+
+authenticationAPI.queries.currentUser().then(console.log).catch(console.error)

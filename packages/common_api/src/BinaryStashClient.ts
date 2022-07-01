@@ -139,14 +139,11 @@ export class BinaryStashClient {
                 authHttpLink,
             )
 
-            console.log('BINARY STASH CLIENT STARTING')
-
             this.client = new ApolloClient({
                 link: splitLink,
                 cache: this.cache,
             })
         } else {
-            console.log('BINARY STASH CLIENT STARTING (NO WEBSOCKET)')
             this.client = new ApolloClient({
                 link: authHttpLink,
                 // link: splitLink,
@@ -156,9 +153,8 @@ export class BinaryStashClient {
     }
 
     private bootstrap() {
-        console.log('BOOTSTRAPPING BINARY STASH CLIENT')
-
         this.generateClient()
+
         this.comment_queries = new CommentQueries(this.client)
         this.comment_mutations = new CommentMutations({
             application_short_name: this.application_short_name,

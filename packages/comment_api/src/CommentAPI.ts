@@ -179,15 +179,15 @@ export class CommentAPI {
     }
 }
 
-// const commentApi = new CommentAPI({
-//     http_uri: 'http://localhost:4000/graphql',
-//     web_socket_uri: 'ws://localhost:4003/graphql',
-//     application_short_name: 'first-application',
-// })
+const commentApi = new CommentAPI({
+    http_uri: 'http://localhost:4000/graphql',
+    web_socket_uri: 'ws://localhost:4003/graphql',
+    application_short_name: 'first-application',
+})
 
-// commentApi.queries
-//     .fetch_comemnts()
-//     .then((data) => {
-//         console.log('COMMENTS', JSON.stringify(data, null, 2))
-//     })
-//     .catch(console.error)
+commentApi.queries
+    .fetch_comemnts()
+    .then((data) => {
+        console.log('COMMENTS', JSON.stringify(data, null, 2))
+    })
+    .catch(console.error)

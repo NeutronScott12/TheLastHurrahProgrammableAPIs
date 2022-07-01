@@ -1,6 +1,6 @@
-import { BinaryStashClient } from '../'
+import { BinaryStashClient } from '../../BinaryStashClient'
 
-describe('BinaryStashClient API Test', () => {
+describe('BinaryStashClient API Authentication Test', () => {
     let binaryStashClient: BinaryStashClient
 
     beforeEach(() => {

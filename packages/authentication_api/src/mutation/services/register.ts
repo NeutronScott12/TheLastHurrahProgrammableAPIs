@@ -15,7 +15,7 @@ export const regsiter = (args: IRegisterArgs, global: IAuthenticationAPI) => {
 
         console.log('APPLICATION_SHORT_NAME', application_short_name)
         console.log('ARGUMENTS', args)
-        console.log('CLIENT', client)
+        // console.log('CLIENT', client)
 
         return client.mutate<
             RegistrationMutation,
