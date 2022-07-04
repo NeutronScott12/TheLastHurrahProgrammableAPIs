@@ -188,6 +188,6 @@ const commentApi = new CommentAPI({
 commentApi.queries
     .fetch_comemnts()
     .then((data) => {
-        console.log('COMMENTS', JSON.stringify(data, null, 2))
+        console.log('INTERNAL_COMMENTS', JSON.stringify(data, null, 2))
     })
     .catch(console.error)
