@@ -16,6 +16,7 @@ import { isBrowser } from 'browser-or-node'
 import { CommentQueries } from './queries'
 import { CommentMutations } from './mutations'
 import { Sort } from './generated/graphql'
+import { Client, createClient } from '@urql/core'
 
 interface ICommentAPIArgs {
     http_uri: string
@@ -25,14 +26,14 @@ interface ICommentAPIArgs {
 }
 
 const TEST_TOKEN =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNzE1N2YzZGItM2E3OS00M2UwLWEzZmUtMDc2OGExZGM4NmJiIiwidXNlcm5hbWUiOiJzY290dCIsImVtYWlsIjoic2NvdHRiZXJyeTkxQGdtYWlsLmNvbSIsImNvbmZpcm1lZCI6dHJ1ZSwiYXBwbGljYXRpb25faWQiOiI2MDY0ZWIwYy0wOGM5LTRkZWEtODdlNy04OTU3NGEyMTA2NDQiLCJpYXQiOjE2NTYwMTA1OTAsImV4cCI6MTY1NjYxNTM5MH0.zZdkSHivj7xCTRVbZE-pjnHcuW1Jb_o2AGVuAamVMMI'
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNzE1N2YzZGItM2E3OS00M2UwLWEzZmUtMDc2OGExZGM4NmJiIiwidXNlcm5hbWUiOiJzY290dCIsImVtYWlsIjoic2NvdHRiZXJyeTkxQGdtYWlsLmNvbSIsImNvbmZpcm1lZCI6dHJ1ZSwiYXBwbGljYXRpb25faWQiOiI2MDY0ZWIwYy0wOGM5LTRkZWEtODdlNy04OTU3NGEyMTA2NDQiLCJpYXQiOjE2NTY5NzMxMDksImV4cCI6MTY1NzU3NzkwOX0.QrfdjqgabPM8HXumgqZULlTiHZci8EsCn1nBG5_94JU'
 
 export class CommentAPI {
     private static instance: CommentAPI
 
-    public client: ApolloClient<NormalizedCacheObject>
-    public queries: CommentQueries
-    public mutations: CommentMutations
+    client: ApolloClient<NormalizedCacheObject>
+    queries: CommentQueries
+    mutations: CommentMutations
     cache: InMemoryCache
     application_short_name: string
     webSocketUrl: string
@@ -53,8 +54,6 @@ export class CommentAPI {
     private generateClient(uri: string, cache: InMemoryCache) {
         const subUri = this.webSocketUrl
 
-        console.log('SUB_URI', subUri)
-
         let httpLink: ApolloLink
         let wsLink: WebSocketLink
 
@@ -63,22 +62,18 @@ export class CommentAPI {
         } else {
             this.token = TEST_TOKEN
         }
-
         if (!cache) {
             this.cache = new InMemoryCache({})
         } else {
             this.cache = cache
         }
-
         if (!this.token && !isBrowser) {
             throw new Error('Token is required')
         }
-
         if (isBrowser) {
             httpLink = createHttpLink({
                 uri,
             })
-
             wsLink = new WebSocketLink({
                 uri: subUri,
                 options: {
@@ -111,7 +106,6 @@ export class CommentAPI {
                 )
             }
         }
-
         const authLink = setContext((_, { headers }) => {
             return {
                 headers: {
@@ -120,9 +114,7 @@ export class CommentAPI {
                 },
             }
         })
-
         const authHttpLink = authLink.concat(httpLink)
-
         if (isBrowser) {
             const splitLink = split(
                 ({ query }) => {
@@ -135,9 +127,6 @@ export class CommentAPI {
                 // wsLink,
                 authHttpLink,
             )
-
-            console.log('CLIENT BROWSER STARTING')
-
             this.client = new ApolloClient({
                 // link: authHttpLink,
                 link: splitLink,
@@ -150,12 +139,10 @@ export class CommentAPI {
                 cache: this.cache,
             })
         }
-
         // console.log('BUILDING CLIENT', this.client)
     }
 
     private bootstrap() {
-        console.log('BOOTSTRAPING COMMENT API CLIENT', this.client)
         this.queries = new CommentQueries(this.client)
         this.mutations = new CommentMutations({
             application_short_name: this.application_short_name,
