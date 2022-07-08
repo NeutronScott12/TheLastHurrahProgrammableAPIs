@@ -25,8 +25,6 @@ interface ICommentAPIArgs {
     web_socket_uri: string
     application_short_name: string
     cache?: InMemoryCache
-    apollo?: boolean
-    graphql_request?: boolean
 }
 
 const TEST_TOKEN =
@@ -43,21 +41,15 @@ export class CommentAPI {
     application_short_name: string
     webSocketUrl: string
     token: string | null
-    apollo: boolean
-    graphql_request: boolean
 
     constructor({
         http_uri,
         web_socket_uri,
         application_short_name,
         cache,
-        apollo = false,
-        graphql_request = false,
     }: ICommentAPIArgs) {
         this.application_short_name = application_short_name
         this.webSocketUrl = web_socket_uri
-        this.apollo = apollo
-        this.graphql_request = graphql_request
         this.generateClient(http_uri, cache!)
         this.bootstrap()
     }
@@ -245,7 +237,6 @@ export class CommentAPI {
     private bootstrap() {
         this.queries = new CommentQueries({
             client: this.client,
-            graphql_request_client: this.graphql_request_client,
         })
         this.mutations = new CommentMutations({
             application_short_name: this.application_short_name,
@@ -274,8 +265,6 @@ const commentApi = new CommentAPI({
     http_uri: 'http://localhost:4000/graphql',
     web_socket_uri: 'ws://localhost:4003/graphql',
     application_short_name: 'first-application',
-    apollo: true,
-    graphql_request: true,
 })
 
 commentApi.queries

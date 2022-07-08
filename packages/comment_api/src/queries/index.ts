@@ -10,16 +10,13 @@ import { FetchCommentsQuery, FetchCommentsDocument } from '../generated/graphql'
 
 interface ICommentQueriesArgs {
     client: ApolloClient<NormalizedCacheObject>
-    graphql_request_client: GraphQLClient
 }
 
 export class CommentQueries {
     client: ApolloClient<NormalizedCacheObject>
-    graphql_request_client: GraphQLClient
 
-    constructor({ graphql_request_client, client }: ICommentQueriesArgs) {
+    constructor({ client }: ICommentQueriesArgs) {
         this.client = client
-        this.graphql_request_client = graphql_request_client
     }
 
     public async fetch_comemnts() {
