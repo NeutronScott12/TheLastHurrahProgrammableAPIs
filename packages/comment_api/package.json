@@ -1,6 +1,6 @@
 {
     "name": "@thelasthurrah/comment_api",
-    "version": "0.0.40",
+    "version": "0.0.45",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "files": [

@@ -5,17 +5,21 @@ import {
     NormalizedCacheObject,
 } from '@apollo/client'
 import { Client } from '@urql/core'
-import request from 'graphql-request'
+import request, { GraphQLClient } from 'graphql-request'
 import { FetchCommentsQuery, FetchCommentsDocument } from '../generated/graphql'
+
+interface ICommentQueriesArgs {
+    client: ApolloClient<NormalizedCacheObject>
+    graphql_request_client: GraphQLClient
+}
 
 export class CommentQueries {
     client: ApolloClient<NormalizedCacheObject>
+    graphql_request_client: GraphQLClient
 
-    constructor(
-        client: ApolloClient<NormalizedCacheObject>,
-        // client: Client,
-    ) {
+    constructor({ graphql_request_client, client }: ICommentQueriesArgs) {
         this.client = client
+        this.graphql_request_client = graphql_request_client
     }
 
     public async fetch_comemnts() {
@@ -23,25 +27,23 @@ export class CommentQueries {
             // this.client.query
             console.log('FETCH_COMEMNT_CLIENT', this.client)
             console.log('FETCH_COMMENT_CLIENT_QUERY', this.client.query)
-            // const response = await this.client.query<FetchCommentsQuery>({
-            //     query: FetchCommentsDocument,
-            // })
 
-            const response: ApolloQueryResult<FetchCommentsQuery> =
-                await request(
-                    'http://localhost:4000/graphql',
-                    FetchCommentsDocument,
-                    {},
-                    {
-                        Authorization:
-                            'Bearer ' +
-                            localStorage.getItem('binary-stash-token'),
-                    },
-                )
+            // Apollo request returns undefined on the client
+            const result = await this.client.query<FetchCommentsQuery>({
+                query: FetchCommentsDocument,
+            })
 
-            console.log('GRAPHQL-REQUEST', response)
+            console.log('FETCH_COMEMNT_CLIENT_RESULT', result)
 
-            return response
+            //The graphql-request returns the correct response.
+
+            // const response = await this.graphql_request_client.request(
+            //     FetchCommentsDocument,
+            // )
+
+            // console.log('GRAPHQL-REQUEST', response)
+
+            return result
         } catch (error) {
             console.log('ERROR', error)
             if (error instanceof ApolloError) {
