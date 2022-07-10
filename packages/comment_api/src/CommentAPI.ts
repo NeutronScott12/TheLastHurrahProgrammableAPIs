@@ -242,7 +242,6 @@ export class CommentAPI {
             application_short_name: this.application_short_name,
             cache: this.cache,
             client: this.client,
-            graphql_request_client: this.graphql_request_client,
             limit: 10,
             skip: 0,
             sort: Sort.Asc,

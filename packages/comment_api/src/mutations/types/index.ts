@@ -8,7 +8,6 @@ import { Maybe, Sort, UpdateCommentInput } from '../../generated/graphql'
 
 export interface ICommentAPI {
     client: ApolloClient<NormalizedCacheObject>
-    graphql_request_client: GraphQLClient
     limit: number
     skip: number
     sort: Sort

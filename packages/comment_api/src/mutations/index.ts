@@ -54,12 +54,10 @@ export class CommentMutations {
         skip,
         sort,
         application_short_name,
-        graphql_request_client,
     }: ICommentAPI) {
         this.cache = cache
 
         this.client = client
-        this.graphql_request_client = graphql_request_client
         this.limit = limit
         this.skip = skip
         this.sort = sort
