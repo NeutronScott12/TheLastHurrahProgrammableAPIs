@@ -3,13 +3,14 @@ import { CommentQueries } from '@thelasthurrah/comment_api'
 
 import {
     CommentAPIProvider,
-    ICommentProvider,
+    IBinaryStashProvider,
 } from '../common/BinaryStashProvider'
+import { BinaryStashClient } from '../../BinaryStashClient'
 
 export function useBinaryCommentQueries(): CommentQueries {
-    const client = useContext(CommentAPIProvider) as ICommentProvider
+    const context = useContext(CommentAPIProvider) as BinaryStashClient
 
-    // console.log('USE_BINARY_COMMENT_QUERIES : CLIENT', client)
+    // console.log('USE_BINARY_COMMENT_QUERIES : context', context)
 
-    return client.queries
+    return context.comment_queries
 }

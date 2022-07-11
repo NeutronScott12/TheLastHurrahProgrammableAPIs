@@ -3,13 +3,14 @@ import { CommentMutations } from '@thelasthurrah/comment_api'
 
 import {
     CommentAPIProvider,
-    ICommentProvider,
+    IBinaryStashProvider,
 } from '../common/BinaryStashProvider'
+import { BinaryStashClient } from '../../BinaryStashClient'
 
 export function useBinaryCommentMutations(): CommentMutations {
-    const client = useContext(CommentAPIProvider) as ICommentProvider
+    const context = useContext(CommentAPIProvider) as BinaryStashClient
 
-    // console.log('CLIENT', client)
+    // console.log('context', context)
 
-    return client.mutations
+    return context.comment_mutations
 }

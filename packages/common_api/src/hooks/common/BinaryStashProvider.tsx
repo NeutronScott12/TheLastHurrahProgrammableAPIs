@@ -1,15 +1,18 @@
+import {
+    AuthenticationMutations,
+    AuthenticationQueries,
+} from '@thelasthurrah/authentication_api'
 import { CommentMutations, CommentQueries } from '@thelasthurrah/comment_api'
 import React, { createContext } from 'react'
 import { BinaryStashClient } from '../../BinaryStashClient'
 
-interface IBinaryStashProvider {
+export interface IBinaryStashProvider {
     children?: React.ReactNode
     client: BinaryStashClient
 }
 
-export interface ICommentProvider {
-    mutations: CommentMutations
-    queries: CommentQueries
+export interface IBinaryStashContext {
+    client: BinaryStashClient
 }
 
 export const CommentAPIProvider = createContext({})

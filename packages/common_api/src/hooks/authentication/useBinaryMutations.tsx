@@ -1,16 +1,16 @@
-import {
-    AuthenticationAPIProvider,
-    AuthenticationMutations,
-    IAuthenticationProvider,
-} from '@thelasthurrah/authentication_api'
 import React, { useContext } from 'react'
+import { AuthenticationMutations } from '@thelasthurrah/authentication_api'
 
-export const useBinaryMutations = (): AuthenticationMutations => {
-    const client = useContext(
-        AuthenticationAPIProvider,
-    ) as IAuthenticationProvider
+import {
+    AuthAPIProvider,
+    IBinaryStashContext,
+} from '../common/BinaryStashProvider'
+import { BinaryStashClient } from '../../BinaryStashClient'
+
+export const useBinaryAuthMutations = (): AuthenticationMutations => {
+    const context = useContext(AuthAPIProvider) as BinaryStashClient
 
     // console.log('CLIENT', client)
 
-    return client.mutations
+    return context.authentication_mutations
 }
