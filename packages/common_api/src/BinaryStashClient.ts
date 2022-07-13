@@ -22,7 +22,7 @@ import {
 } from '@thelasthurrah/authentication_api'
 
 const TEST_TOKEN =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNzE1N2YzZGItM2E3OS00M2UwLWEzZmUtMDc2OGExZGM4NmJiIiwidXNlcm5hbWUiOiJzY290dCIsImVtYWlsIjoic2NvdHRiZXJyeTkxQGdtYWlsLmNvbSIsImNvbmZpcm1lZCI6dHJ1ZSwiaWF0IjoxNjU3MjkxNTQ1LCJleHAiOjE2NTc4OTYzNDV9.7Lqhi9slVIr6SRiNriH0WGKJ7S7Pp1yeedZLINHyr8A'
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNzE1N2YzZGItM2E3OS00M2UwLWEzZmUtMDc2OGExZGM4NmJiIiwidXNlcm5hbWUiOiJzY290dCIsImVtYWlsIjoic2NvdHRiZXJyeTkxQGdtYWlsLmNvbSIsImNvbmZpcm1lZCI6dHJ1ZSwiaWF0IjoxNjU3NzIwNzI2LCJleHAiOjE2NTgzMjU1MjZ9.RxgeTpQXeKWOAP88ArYrOgoeRr4zFQgbfH8CQUvsZm8'
 
 interface IBinaryStashClientArgs {
     http_uri: string
@@ -138,7 +138,10 @@ export class BinaryStashClient {
     private bootstrap() {
         this.generateClient()
 
-        this.comment_queries = new CommentQueries({ client: this.client })
+        this.comment_queries = new CommentQueries({
+            client: this.client,
+            application_short_name: this.application_short_name,
+        })
         this.comment_mutations = new CommentMutations({
             application_short_name: this.application_short_name,
             cache: this.cache,
