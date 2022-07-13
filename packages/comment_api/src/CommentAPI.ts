@@ -28,7 +28,7 @@ interface ICommentAPIArgs {
 }
 
 const TEST_TOKEN =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNzE1N2YzZGItM2E3OS00M2UwLWEzZmUtMDc2OGExZGM4NmJiIiwidXNlcm5hbWUiOiJzY290dCIsImVtYWlsIjoic2NvdHRiZXJyeTkxQGdtYWlsLmNvbSIsImNvbmZpcm1lZCI6dHJ1ZSwiYXBwbGljYXRpb25faWQiOiI2MDY0ZWIwYy0wOGM5LTRkZWEtODdlNy04OTU3NGEyMTA2NDQiLCJpYXQiOjE2NTY5NzMxMDksImV4cCI6MTY1NzU3NzkwOX0.QrfdjqgabPM8HXumgqZULlTiHZci8EsCn1nBG5_94JU'
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNzE1N2YzZGItM2E3OS00M2UwLWEzZmUtMDc2OGExZGM4NmJiIiwidXNlcm5hbWUiOiJzY290dCIsImVtYWlsIjoic2NvdHRiZXJyeTkxQGdtYWlsLmNvbSIsImNvbmZpcm1lZCI6dHJ1ZSwiaWF0IjoxNjU3NzE4NjkwLCJleHAiOjE2NTgzMjM0OTB9.mlWoi5moq60An3m9ED4nC0N3bmdcc0iuJ1CxX4naVKI'
 
 export class CommentAPI {
     private static instance: CommentAPI
@@ -236,6 +236,7 @@ export class CommentAPI {
 
     private bootstrap() {
         this.queries = new CommentQueries({
+            application_short_name: this.application_short_name,
             client: this.client,
         })
         this.mutations = new CommentMutations({
