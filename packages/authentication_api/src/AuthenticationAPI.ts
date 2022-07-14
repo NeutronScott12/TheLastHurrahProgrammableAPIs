@@ -106,10 +106,3 @@ export class AuthenticationAPI {
         })
     }
 }
-
-const authenticationAPI = new AuthenticationAPI(
-    'http://localhost:4000/graphql',
-    'first-application',
-)
-
-authenticationAPI.queries.currentUser().then(console.log).catch(console.error)

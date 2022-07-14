@@ -5,7 +5,7 @@ input CreateCommentInput {
     thread_id: String!
 }
 
-mutation CreateThreadComent($createCommentInput: CreateCommentInput!) {
+mutation CreateComment($createCommentInput: CreateCommentInput!) {
     create_comment(CreateCommentInput: $createCommentInput) {
         ...CommentFragment
         replies {

@@ -220,7 +220,7 @@ export type CreateApplicationInput = {
 
 export type CreateCommentInput = {
   application_id: Scalars['String'];
-  json_body: Scalars['JSONObject'];
+  json_body: Array<Scalars['JSONObject']>;
   plain_text_body: Scalars['String'];
   thread_id: Scalars['String'];
 };
@@ -241,7 +241,7 @@ export type CreatePollInput = {
 
 export type CreateReplyCommentInput = {
   application_id: Scalars['String'];
-  json_body: Scalars['JSONObject'];
+  json_body: Array<Scalars['JSONObject']>;
   parent_id: Scalars['String'];
   plain_text_body: Scalars['String'];
   replied_to_id: Scalars['String'];
@@ -421,7 +421,6 @@ export type Mutation = {
   block_user: StandardResponseModel;
   block_users_from_application: ApplicationModel;
   cancel_order: StandardResponseModel;
-  cancel_subscription_plan: ApplicationModel;
   change_comment_settings: CommentModel;
   change_password: StandardResponseModel;
   change_subscription_plan: ApplicationModel;
@@ -1162,12 +1161,12 @@ export type DeleteThreadByIdMutationVariables = Exact<{
 
 export type DeleteThreadByIdMutation = { __typename?: 'Mutation', delete_thread_by_id: { __typename?: 'StandardResponseModel', success: boolean, message: string } };
 
-export type CreateThreadComentMutationVariables = Exact<{
+export type CreateCommentMutationVariables = Exact<{
   createCommentInput: CreateCommentInput;
 }>;
 
 
-export type CreateThreadComentMutation = { __typename?: 'Mutation', create_comment: { __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, author: { __typename?: 'UserModel', username: string, id: string }, up_vote: Array<{ __typename?: 'RatingModel', id: string }>, down_vote: Array<{ __typename?: 'RatingModel', id: string }>, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null }>, author: { __typename?: 'UserModel', username: string, id: string }, up_vote: Array<{ __typename?: 'RatingModel', id: string }>, down_vote: Array<{ __typename?: 'RatingModel', id: string }>, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null }>, author: { __typename?: 'UserModel', username: string, id: string }, up_vote: Array<{ __typename?: 'RatingModel', id: string }>, down_vote: Array<{ __typename?: 'RatingModel', id: string }>, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null } };
+export type CreateCommentMutation = { __typename?: 'Mutation', create_comment: { __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, replies: Array<{ __typename?: 'CommentModel', application_id: string, plain_text_body: string, json_body: Array<any>, id: string, thread_id: string, created_at: any, updated_at: any, user_id: string, parent_id?: string | null, pending: boolean, edited: boolean, approved: boolean, reply_notification: boolean, author: { __typename?: 'UserModel', username: string, id: string }, up_vote: Array<{ __typename?: 'RatingModel', id: string }>, down_vote: Array<{ __typename?: 'RatingModel', id: string }>, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null }>, author: { __typename?: 'UserModel', username: string, id: string }, up_vote: Array<{ __typename?: 'RatingModel', id: string }>, down_vote: Array<{ __typename?: 'RatingModel', id: string }>, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null }>, author: { __typename?: 'UserModel', username: string, id: string }, up_vote: Array<{ __typename?: 'RatingModel', id: string }>, down_vote: Array<{ __typename?: 'RatingModel', id: string }>, _count: { __typename?: 'CountModel', down_vote: number, replies: number, up_vote: number }, replied_to_user?: { __typename?: 'UserModel', username: string } | null } };
 
 export type EditThreadCommentMutationVariables = Exact<{
   UpdateCommentInput: UpdateCommentInput;
@@ -1356,8 +1355,8 @@ export function useDeleteThreadByIdMutation(baseOptions?: Apollo.MutationHookOpt
 export type DeleteThreadByIdMutationHookResult = ReturnType<typeof useDeleteThreadByIdMutation>;
 export type DeleteThreadByIdMutationResult = Apollo.MutationResult<DeleteThreadByIdMutation>;
 export type DeleteThreadByIdMutationOptions = Apollo.BaseMutationOptions<DeleteThreadByIdMutation, DeleteThreadByIdMutationVariables>;
-export const CreateThreadComentDocument = gql`
-    mutation CreateThreadComent($createCommentInput: CreateCommentInput!) {
+export const CreateCommentDocument = gql`
+    mutation CreateComment($createCommentInput: CreateCommentInput!) {
   create_comment(CreateCommentInput: $createCommentInput) {
     ...CommentFragment
     replies {
@@ -1369,32 +1368,32 @@ export const CreateThreadComentDocument = gql`
   }
 }
     ${CommentFragmentFragmentDoc}`;
-export type CreateThreadComentMutationFn = Apollo.MutationFunction<CreateThreadComentMutation, CreateThreadComentMutationVariables>;
+export type CreateCommentMutationFn = Apollo.MutationFunction<CreateCommentMutation, CreateCommentMutationVariables>;
 
 /**
- * __useCreateThreadComentMutation__
+ * __useCreateCommentMutation__
  *
- * To run a mutation, you first call `useCreateThreadComentMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateThreadComentMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useCreateCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCommentMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [createThreadComentMutation, { data, loading, error }] = useCreateThreadComentMutation({
+ * const [createCommentMutation, { data, loading, error }] = useCreateCommentMutation({
  *   variables: {
  *      createCommentInput: // value for 'createCommentInput'
  *   },
  * });
  */
-export function useCreateThreadComentMutation(baseOptions?: Apollo.MutationHookOptions<CreateThreadComentMutation, CreateThreadComentMutationVariables>) {
+export function useCreateCommentMutation(baseOptions?: Apollo.MutationHookOptions<CreateCommentMutation, CreateCommentMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateThreadComentMutation, CreateThreadComentMutationVariables>(CreateThreadComentDocument, options);
+        return Apollo.useMutation<CreateCommentMutation, CreateCommentMutationVariables>(CreateCommentDocument, options);
       }
-export type CreateThreadComentMutationHookResult = ReturnType<typeof useCreateThreadComentMutation>;
-export type CreateThreadComentMutationResult = Apollo.MutationResult<CreateThreadComentMutation>;
-export type CreateThreadComentMutationOptions = Apollo.BaseMutationOptions<CreateThreadComentMutation, CreateThreadComentMutationVariables>;
+export type CreateCommentMutationHookResult = ReturnType<typeof useCreateCommentMutation>;
+export type CreateCommentMutationResult = Apollo.MutationResult<CreateCommentMutation>;
+export type CreateCommentMutationOptions = Apollo.BaseMutationOptions<CreateCommentMutation, CreateCommentMutationVariables>;
 export const EditThreadCommentDocument = gql`
     mutation EditThreadComment($UpdateCommentInput: UpdateCommentInput!) {
   update_comment(UpdateCommentInput: $UpdateCommentInput) {
@@ -1915,7 +1914,7 @@ export type LoginResponseFieldPolicy = {
 	two_factor_authentication?: FieldPolicy<any> | FieldReadFunction<any>,
 	user?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type MutationKeySpecifier = ('add_application_moderator' | 'add_pinned_comment' | 'add_user_to_shadow_ban' | 'add_user_to_threads_active_users' | 'approve_comments' | 'block_user' | 'block_users_from_application' | 'cancel_order' | 'cancel_subscription_plan' | 'change_comment_settings' | 'change_password' | 'change_subscription_plan' | 'close_poll' | 'confirm_user' | 'create_application' | 'create_comment' | 'create_order' | 'create_poll' | 'create_reply_comment' | 'create_report' | 'delete_comment' | 'delete_many_comments' | 'delete_many_notifications' | 'delete_notification' | 'delete_poll' | 'delete_report_by_id' | 'delete_thread_by_id' | 'delete_user' | 'down_vote_comment' | 'forgot_password' | 'login_user' | 'logout_user' | 'refund_order' | 'regenerate_new_auth_secret' | 'register_user' | 'remove_application' | 'remove_application_moderator' | 'remove_user_from_threads_active_users' | 'remove_users_from_shadow_ban' | 'toggle_subscription_to_thread' | 'two_factor_login' | 'unblock_user' | 'unblock_users_from_application' | 'up_vote_comment' | 'update_application' | 'update_application_comment_rules' | 'update_comment' | 'update_poll_vote' | 'update_user' | 'upgrade_subscription_plan' | MutationKeySpecifier)[];
+export type MutationKeySpecifier = ('add_application_moderator' | 'add_pinned_comment' | 'add_user_to_shadow_ban' | 'add_user_to_threads_active_users' | 'approve_comments' | 'block_user' | 'block_users_from_application' | 'cancel_order' | 'change_comment_settings' | 'change_password' | 'change_subscription_plan' | 'close_poll' | 'confirm_user' | 'create_application' | 'create_comment' | 'create_order' | 'create_poll' | 'create_reply_comment' | 'create_report' | 'delete_comment' | 'delete_many_comments' | 'delete_many_notifications' | 'delete_notification' | 'delete_poll' | 'delete_report_by_id' | 'delete_thread_by_id' | 'delete_user' | 'down_vote_comment' | 'forgot_password' | 'login_user' | 'logout_user' | 'refund_order' | 'regenerate_new_auth_secret' | 'register_user' | 'remove_application' | 'remove_application_moderator' | 'remove_user_from_threads_active_users' | 'remove_users_from_shadow_ban' | 'toggle_subscription_to_thread' | 'two_factor_login' | 'unblock_user' | 'unblock_users_from_application' | 'up_vote_comment' | 'update_application' | 'update_application_comment_rules' | 'update_comment' | 'update_poll_vote' | 'update_user' | 'upgrade_subscription_plan' | MutationKeySpecifier)[];
 export type MutationFieldPolicy = {
 	add_application_moderator?: FieldPolicy<any> | FieldReadFunction<any>,
 	add_pinned_comment?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -1925,7 +1924,6 @@ export type MutationFieldPolicy = {
 	block_user?: FieldPolicy<any> | FieldReadFunction<any>,
 	block_users_from_application?: FieldPolicy<any> | FieldReadFunction<any>,
 	cancel_order?: FieldPolicy<any> | FieldReadFunction<any>,
-	cancel_subscription_plan?: FieldPolicy<any> | FieldReadFunction<any>,
 	change_comment_settings?: FieldPolicy<any> | FieldReadFunction<any>,
 	change_password?: FieldPolicy<any> | FieldReadFunction<any>,
 	change_subscription_plan?: FieldPolicy<any> | FieldReadFunction<any>,

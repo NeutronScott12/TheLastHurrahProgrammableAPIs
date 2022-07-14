@@ -19,10 +19,10 @@
         // "noEmit": true,
         "jsx": "react-jsx",
         "downlevelIteration": true,
-        "strictPropertyInitialization": false,
-        "paths": {
-            "~/*": ["./src/*"]
-        }
+        "strictPropertyInitialization": false
+        // "paths": {
+        //     "~/*": ["./src/*"]
+        // }
     },
     "include": ["src"]
 }

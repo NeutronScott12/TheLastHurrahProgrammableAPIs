@@ -1,4 +1,4 @@
-import { InMemoryCache } from '@apollo/client/cache'
+import { ApolloCache, InMemoryCache } from '@apollo/client/cache'
 import {
     FetchCommentByThreadIdDocument,
     FetchCommentByThreadIdQuery,
@@ -11,7 +11,7 @@ export interface IFetchCommentByThreadIdQueryArgs {
     skip: number
     sort: Sort
     application_short_name: string
-    cache: InMemoryCache
+    cache: InMemoryCache | ApolloCache<any>
 }
 
 export const fetchCommentByThreadIdQueryCache = ({

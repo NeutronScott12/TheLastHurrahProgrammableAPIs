@@ -1,10 +1,10 @@
 import { ApolloError } from '@apollo/client'
 import { clone, mergeDeepRight } from 'ramda'
 import {
+    CreateCommentDocument,
     CreateCommentInput,
-    CreateThreadComentDocument,
-    CreateThreadComentMutation,
-    CreateThreadComentMutationVariables,
+    CreateCommentMutation,
+    CreateCommentMutationVariables,
 } from '../../generated/graphql'
 import {
     fetchCommentByThreadIdQueryCache,
@@ -23,10 +23,10 @@ export const createComment = async (
 
     try {
         return await client.mutate<
-            CreateThreadComentMutation,
-            CreateThreadComentMutationVariables
+            CreateCommentMutation,
+            CreateCommentMutationVariables
         >({
-            mutation: CreateThreadComentDocument,
+            mutation: CreateCommentDocument,
             variables: {
                 createCommentInput: {
                     application_id,
