@@ -1,14 +1,15 @@
-import {
-    AuthenticationMutations,
-    AuthenticationQueries,
-} from '@thelasthurrah/authentication_api'
-import { CommentMutations, CommentQueries } from '@thelasthurrah/comment_api'
+// import { ApolloProvider } from '@apollo/client'
+// import {
+//     AuthenticationMutations,
+//     AuthenticationQueries,
+// } from '@thelasthurrah/authentication_api'
+// import { CommentMutations, CommentQueries } from '@thelasthurrah/comment_api'
 import React, { createContext } from 'react'
 import { BinaryStashClient } from '../../BinaryStashClient'
 
 export interface IBinaryStashProvider {
     children?: React.ReactNode
-    client: BinaryStashClient
+    binaryStashClient: BinaryStashClient
 }
 
 export interface IBinaryStashContext {
@@ -21,14 +22,16 @@ export const AuthAPIProvider = createContext({})
 
 export function BinaryStashProvider({
     children,
-    client,
+    binaryStashClient,
 }: IBinaryStashProvider) {
     return (
-        <AuthAPIProvider.Provider value={client}>
-            <CommentAPIProvider.Provider value={client}>
+        // <ApolloProvider client={binaryStashClient.client}>
+        <AuthAPIProvider.Provider value={binaryStashClient}>
+            <CommentAPIProvider.Provider value={binaryStashClient}>
                 {children}
             </CommentAPIProvider.Provider>
         </AuthAPIProvider.Provider>
+        // </ApolloProvider>
     )
 }
 
