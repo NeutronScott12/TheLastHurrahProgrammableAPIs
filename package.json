@@ -5,7 +5,8 @@
     "license": "MIT",
     "private": true,
     "scripts": {
-        "remove_all:node_modules": "npx rimraf ./**/node_modules"
+        "remove_all:node_modules": "npx rimraf ./**/node_modules",
+        "prepare": "husky install"
     },
     "dependencies": {
         "glob": "^8.0.3",
@@ -20,5 +21,8 @@
             "@graphql-codegen/**",
             "**graphql/**"
         ]
+    },
+    "devDependencies": {
+        "husky": "^8.0.1"
     }
 }

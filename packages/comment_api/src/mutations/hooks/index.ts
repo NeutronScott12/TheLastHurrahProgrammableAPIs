@@ -1,18 +1,15 @@
 import {
-    fetchCommentByThreadIdQueryCache,
-    WriteCommentByThreadIdQueryArgs,
-} from '../../helpers'
-import {
-    CreateCommentInput,
-    Sort,
-    useCreateCommentMutation,
-} from '../../generated/graphql'
-import { clone, mergeDeepRight } from 'ramda'
-import {
     ApolloClient,
     InMemoryCache,
     NormalizedCacheObject,
 } from '@apollo/client'
+
+import {
+    Sort,
+    useCreateCommentMutation,
+    useEditThreadCommentMutation,
+} from '../../generated/graphql'
+import { createCommentHelper, editComemntHelper } from '../helpers/functions'
 
 interface IUseCreateCommentOpts {
     limit: number
@@ -32,53 +29,48 @@ export const useCreateComment = (
     return useCreateCommentMutation({
         client: client ? client : undefined,
         update(cache, { data }) {
-            const response = fetchCommentByThreadIdQueryCache({
+            createCommentHelper({
                 thread_id: args.thread_id,
                 limit,
                 skip,
                 application_short_name,
                 sort,
                 cache,
+                data,
             })
+        },
+    })
+}
 
-            console.log('FIRST_RESPONSE', response)
+interface IUseEditCommentOpts {
+    thread_id: string
+    skip: number
+    limit: number
+    application_short_name: string
+    sort: Sort
+    client?: ApolloClient<NormalizedCacheObject>
+}
 
-            if (
-                response &&
-                response.fetch_comments_by_thread_id &&
-                data &&
-                data.create_comment
-            ) {
-                console.log('RESPONSE', response)
-                console.log('DATA', data)
-
-                const cloneData = clone(response)
-                const newData = {
-                    fetch_comments_by_thread_id: {
-                        __typename:
-                            response.fetch_comments_by_thread_id.__typename,
-                        comments_count:
-                            cloneData.fetch_comments_by_thread_id
-                                .comments_count,
-                        comments: [
-                            data.create_comment,
-                            ...cloneData.fetch_comments_by_thread_id.comments,
-                        ],
-                    },
-                }
-
-                const changedObject = mergeDeepRight(cloneData, newData)
-
-                WriteCommentByThreadIdQueryArgs({
-                    thread_id: args.thread_id,
-                    limit,
-                    skip,
-                    sort,
-                    application_short_name,
-                    data: changedObject,
-                    cache,
-                })
-            }
+export const useEditComment = ({
+    client,
+    thread_id,
+    skip,
+    limit,
+    sort,
+    application_short_name,
+}: IUseEditCommentOpts) => {
+    return useEditThreadCommentMutation({
+        client: client ? client : undefined,
+        update(cache, { data }) {
+            editComemntHelper({
+                thread_id,
+                data,
+                cache,
+                skip,
+                limit,
+                application_short_name,
+                sort,
+            })
         },
     })
 }
