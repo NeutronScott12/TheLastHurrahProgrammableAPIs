@@ -1,4 +1,5 @@
 import {
+    ApolloCache,
     ApolloClient,
     InMemoryCache,
     NormalizedCacheObject,
@@ -44,4 +45,13 @@ export interface IFindOrCreateOneThreadInputArgs {
     application_id: string
     title: string
     website_url: string
+}
+
+export interface IHelperArgs {
+    thread_id: string
+    limit: number
+    skip: number
+    application_short_name: string
+    sort: Sort
+    cache: ApolloCache<any>
 }

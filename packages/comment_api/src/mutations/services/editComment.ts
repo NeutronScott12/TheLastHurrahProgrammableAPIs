@@ -1,27 +1,10 @@
 import { ApolloError } from '@apollo/client'
 import {
-    clone,
-    findIndex,
-    propEq,
-    update,
-    insert,
-    remove,
-    curry,
-    map,
-    when,
-    evolve,
-    always,
-    mergeDeepRight,
-} from 'ramda'
-import {
     EditThreadCommentDocument,
     EditThreadCommentMutation,
     EditThreadCommentMutationVariables,
 } from '../../generated/graphql'
-import {
-    fetchCommentByThreadIdQueryCache,
-    WriteCommentByThreadIdQueryArgs,
-} from '../../helpers'
+import { editComemntHelper } from '../helpers/functions'
 import { ICommentAPI, IEditCommentArgs } from '../types'
 
 export const editComment = async (
@@ -44,7 +27,17 @@ export const editComment = async (
                     comment_id,
                 },
             },
-            update(cache, { data }) {},
+            update(cache, { data }) {
+                editComemntHelper({
+                    thread_id,
+                    data,
+                    cache,
+                    skip,
+                    limit,
+                    application_short_name,
+                    sort,
+                })
+            },
         })
     } catch (error) {
         console.log('ERROR', JSON.stringify(error, null, 2))

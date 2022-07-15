@@ -1,15 +1,13 @@
 import { ApolloError } from '@apollo/client'
-import { clone, mergeDeepRight } from 'ramda'
+
 import {
     DeleteThreadCommentDocument,
     DeleteThreadCommentMutation,
     DeleteThreadCommentMutationVariables,
 } from '../../generated/graphql'
-import {
-    fetchCommentByThreadIdQueryCache,
-    WriteCommentByThreadIdQueryArgs,
-} from '../../helpers'
-import { CommentAPIErrors } from '../../helpers/errors'
+
+import { deleteCommentHelper } from '../helpers/functions'
+
 import { ICommentAPI, IDeleteCommentArgs } from '../types'
 
 export const deleteComment = async (
@@ -26,44 +24,17 @@ export const deleteComment = async (
         >({
             mutation: DeleteThreadCommentDocument,
             variables: { commentId: comment_id },
-            update(cache) {
-                const response = fetchCommentByThreadIdQueryCache({
+            update(cache, { data }) {
+                deleteCommentHelper({
+                    data,
+                    comment_id,
+                    cache,
                     thread_id,
+                    application_short_name,
+                    sort,
                     limit,
                     skip,
-                    sort,
-                    application_short_name,
-                    cache: global.cache,
                 })
-
-                if (response && response.fetch_comments_by_thread_id) {
-                    const cloned = clone(response)
-                    const filteredList =
-                        cloned.fetch_comments_by_thread_id.comments.filter(
-                            (data) => data.id !== comment_id,
-                        )
-
-                    const newData = mergeDeepRight(cloned, {
-                        fetch_comments_by_thread_id: {
-                            __typename:
-                                cloned.fetch_comments_by_thread_id.__typename,
-                            comments_count:
-                                cloned.fetch_comments_by_thread_id
-                                    .comments_count,
-                            comments: [...filteredList],
-                        },
-                    })
-
-                    WriteCommentByThreadIdQueryArgs({
-                        thread_id,
-                        limit,
-                        skip,
-                        sort,
-                        application_short_name,
-                        data: newData,
-                        cache: global.cache,
-                    })
-                }
             },
         })
     } catch (error) {
