@@ -1,10 +1,20 @@
 import { ApolloClient, NormalizedCacheObject } from '@apollo/client'
 
 import {
+    CreateCommentMutationHookResult,
+    CreateCommentReportMutationHookResult,
+    CreateReplyCommentMutationHookResult,
+    DeleteThreadCommentMutationHookResult,
+    DownVoteCommentMutationHookResult,
+    EditThreadCommentMutationHookResult,
+    UpVoteCommentMutationHookResult,
     useCreateCommentMutation,
+    useCreateCommentReportMutation,
     useCreateReplyCommentMutation,
     useDeleteThreadCommentMutation,
+    useDownVoteCommentMutation,
     useEditThreadCommentMutation,
+    useUpVoteCommentMutation,
 } from '../../generated/graphql'
 import {
     createCommentHelper,
@@ -15,14 +25,15 @@ import {
 } from '../helpers/functions'
 import { IHelperArgs } from '../types'
 
-interface IUseCreateCommentOpts extends Omit<IHelperArgs, 'cache'> {
+interface IUseCreateCommentOpts
+    extends Omit<IHelperArgs, 'cache' | 'thread_id'> {
     client?: ApolloClient<NormalizedCacheObject>
 }
 
 export const useCreateComment = (
     args: { thread_id: string },
     options: IUseCreateCommentOpts,
-) => {
+): CreateCommentMutationHookResult => {
     const { limit, skip, application_short_name, sort, client } = options
 
     return useCreateCommentMutation({
@@ -52,7 +63,7 @@ export const useEditComment = ({
     limit,
     sort,
     application_short_name,
-}: IUseEditCommentOpts) => {
+}: IUseEditCommentOpts): EditThreadCommentMutationHookResult => {
     return useEditThreadCommentMutation({
         client: client ? client : undefined,
         update(cache, { data }) {
@@ -69,7 +80,7 @@ export const useEditComment = ({
     })
 }
 
-interface IUseDeleteComment extends IHelperArgs {
+interface IUseDeleteComment extends Omit<IHelperArgs, 'cache'> {
     client: ApolloClient<NormalizedCacheObject>
     comment_id: string
 }
@@ -82,7 +93,7 @@ export const useDeleteComment = ({
     thread_id,
     sort,
     comment_id,
-}: IUseDeleteComment) => {
+}: IUseDeleteComment): DeleteThreadCommentMutationHookResult => {
     return useDeleteThreadCommentMutation({
         client: client ? client : undefined,
         update(cache, { data }) {
@@ -117,7 +128,7 @@ export const useDeleteReplyComment = ({
     thread_id,
     comment_id,
     parent_id,
-}: IUseDeleteReplyCommentOpts) => {
+}: IUseDeleteReplyCommentOpts): DeleteThreadCommentMutationHookResult => {
     return useDeleteThreadCommentMutation({
         client: client ? client : undefined,
         update(cache, { data }) {
@@ -146,7 +157,7 @@ export const useCreateReplyComment = ({
     limit,
     sort,
     application_short_name,
-}: IUseCreateReplyCommentOpts) => {
+}: IUseCreateReplyCommentOpts): CreateReplyCommentMutationHookResult => {
     return useCreateReplyCommentMutation({
         client: client ? client : undefined,
         update(cache, { data }) {
@@ -160,5 +171,39 @@ export const useCreateReplyComment = ({
                 application_short_name,
             })
         },
+    })
+}
+
+interface IUseCommentVoteOpts extends Omit<IHelperArgs, 'cache'> {
+    client?: ApolloClient<NormalizedCacheObject>
+}
+
+interface IUseCommentVoteResult {
+    upvote: UpVoteCommentMutationHookResult
+    downvote: DownVoteCommentMutationHookResult
+}
+
+export const useCommentVote = ({
+    client,
+}: IUseCommentVoteOpts): IUseCommentVoteResult => {
+    return {
+        upvote: useUpVoteCommentMutation({
+            client: client ? client : undefined,
+        }),
+        downvote: useDownVoteCommentMutation({
+            client: client ? client : undefined,
+        }),
+    }
+}
+
+interface IUseReportCommentOpts extends Omit<IHelperArgs, 'cache'> {
+    client?: ApolloClient<NormalizedCacheObject>
+}
+
+export const useReportComment = ({
+    client,
+}: IUseReportCommentOpts): CreateCommentReportMutationHookResult => {
+    return useCreateCommentReportMutation({
+        client: client ? client : undefined,
     })
 }
