@@ -259,6 +259,17 @@ export const deleteReplyCommentHelper = ({
     parent_id,
     comment_id,
 }: IDeleteReplyCommentHelperArgs) => {
+    console.log(
+        'DELETE_REPLY_COMMENT_HELPER',
+        thread_id,
+        limit,
+        skip,
+        sort,
+        cache,
+        parent_id,
+        comment_id,
+    )
+
     const response = fetchCommentByThreadIdQueryCache({
         thread_id,
         limit,
