@@ -4,4 +4,12 @@ export * from './authentication/useBinaryQueries'
 export * from './comment/useCommentMutations'
 export * from './comment/useCommentQueries'
 
-export { useCreateComment, useFetchComments } from '@thelasthurrah/comment_api'
+export {
+    useCreateComment,
+    useFetchComments,
+    useEditComment,
+    useCreateReplyComment,
+    useDeleteComment,
+    useReportComment,
+    useCommentVote,
+} from '@thelasthurrah/comment_api'
