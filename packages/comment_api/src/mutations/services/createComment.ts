@@ -1,16 +1,12 @@
 import { ApolloError } from '@apollo/client'
-import { clone, mergeDeepRight } from 'ramda'
 import {
     CreateCommentDocument,
     CreateCommentInput,
     CreateCommentMutation,
     CreateCommentMutationVariables,
 } from '../../generated/graphql'
-import {
-    fetchCommentByThreadIdQueryCache,
-    WriteCommentByThreadIdQueryArgs,
-} from '../../helpers'
-import { CommentAPIErrors } from '../../helpers/errors'
+
+import { createCommentHelper } from '../helpers/functions'
 import { ICommentAPI } from '../types'
 
 export const createComment = async (
@@ -35,7 +31,17 @@ export const createComment = async (
                     thread_id,
                 },
             },
-            update(cache, { data }) {},
+            update(cache, { data }) {
+                createCommentHelper({
+                    thread_id,
+                    limit,
+                    skip,
+                    application_short_name,
+                    sort,
+                    cache,
+                    data,
+                })
+            },
         })
     } catch (error) {
         console.log('ERROR', error)

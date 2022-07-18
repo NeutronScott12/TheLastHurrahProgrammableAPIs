@@ -183,6 +183,20 @@ interface IUseCommentVoteResult {
     downvote: DownVoteCommentMutationHookResult
 }
 
+export const useUpVoteComment = ({
+    client,
+}: IUseCommentVoteOpts): UpVoteCommentMutationHookResult => {
+    return useUpVoteCommentMutation({
+        client: client ? client : undefined,
+    })
+}
+
+export const useDownVoteComment = ({ client }: IUseCommentVoteOpts) => {
+    return useDownVoteCommentMutation({
+        client: client ? client : undefined,
+    })
+}
+
 export const useCommentVote = ({
     client,
 }: IUseCommentVoteOpts): IUseCommentVoteResult => {
