@@ -11,5 +11,7 @@ export {
     useCreateReplyComment,
     useDeleteComment,
     useReportComment,
+    useUpVoteComment,
+    useDownVoteComment,
     useCommentVote,
 } from '@thelasthurrah/comment_api'
