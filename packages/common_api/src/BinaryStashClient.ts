@@ -32,10 +32,10 @@ interface IBinaryStashClientArgs {
 }
 
 export class BinaryStashClient {
-    private http_uri: string
-    private ws_uri: string | null
-    private application_short_name: string
-    private token: string | null = null
+    http_uri: string
+    ws_uri: string | null
+    application_short_name: string
+    token: string
     cache: InMemoryCache
     client: ApolloClient<NormalizedCacheObject>
     comment_queries: CommentQueries
@@ -58,15 +58,13 @@ export class BinaryStashClient {
     }
 
     private generateClient() {
-        let token: string | null
-
-        if (isBrowser) {
-            token = localStorage.getItem('binary-stash-token')
+        if (isBrowser && this.token === '') {
+            this.token = localStorage.getItem('binary-stash-token') || ''
         } else {
-            token = TEST_TOKEN
+            this.token = TEST_TOKEN
         }
 
-        if (!token && !isBrowser) {
+        if (!this.token && !isBrowser) {
             throw new Error('Token is required')
         }
 
@@ -83,7 +81,7 @@ export class BinaryStashClient {
             return {
                 headers: {
                     ...headers,
-                    authorization: 'token' ? `Bearer ${token}` : '',
+                    authorization: 'token' ? `Bearer ${this.token}` : '',
                 },
             }
         })
@@ -96,7 +94,7 @@ export class BinaryStashClient {
                 options: {
                     reconnect: true,
                     connectionParams: {
-                        Authorization: `Bearer ${token}`,
+                        Authorization: `Bearer ${this.token}`,
                     },
                 },
             })
@@ -135,6 +133,14 @@ export class BinaryStashClient {
         })
     }
 
+    private changeToken(token: string) {
+        console.log('CHANGE_TOKEN_METHOD', token)
+        this.token = token
+        console.log('BINARY_TOKEN', this.token)
+        this.bootstrap()
+        console.log('BINARY STASH CLIENT', this)
+    }
+
     private bootstrap() {
         this.generateClient()
 
@@ -155,6 +161,7 @@ export class BinaryStashClient {
             client: this.client,
             application_short_name: this.application_short_name,
             cache: this.cache,
+            changeToken: this.changeToken.bind(this),
         })
     }
 }
