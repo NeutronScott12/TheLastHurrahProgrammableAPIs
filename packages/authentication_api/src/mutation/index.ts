@@ -32,11 +32,18 @@ export class AuthenticationMutations {
     client: ApolloClient<NormalizedCacheObject>
     cache: InMemoryCache
     application_short_name: string
+    changeToken: (token: string) => void
 
-    constructor({ client, cache, application_short_name }: IAuthenticationAPI) {
+    constructor({
+        client,
+        cache,
+        application_short_name,
+        changeToken,
+    }: IAuthenticationAPI) {
         this.application_short_name = application_short_name
         this.client = client
         this.cache = cache
+        this.changeToken = changeToken
     }
 
     public async login(args: ILoginArgs) {

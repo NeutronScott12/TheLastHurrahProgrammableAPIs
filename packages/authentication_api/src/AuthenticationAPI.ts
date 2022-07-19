@@ -12,10 +12,12 @@ const TEST_TOKEN =
 
 export class AuthenticationAPI {
     public client: ApolloClient<NormalizedCacheObject>
-    cache: InMemoryCache
+    cache: InMemoryCache | undefined
     application_short_name: string
     queries: AuthenticationQueries
     mutations: AuthenticationMutations
+    token: string | null = null
+    web_uri: string
 
     constructor(
         uri: string,
@@ -23,21 +25,21 @@ export class AuthenticationAPI {
         cache?: InMemoryCache,
         token_name?: string,
     ) {
+        this.web_uri = uri
+        this.cache = cache
         this.application_short_name = application_short_name
         this.generateClient(uri, cache!)
         this.bootstrap()
     }
 
     private generateClient(uri: string, cache: InMemoryCache) {
-        let token: string | null
-
         if (isBrowser) {
-            token = localStorage.getItem('binary-stash-token')
+            this.token = localStorage.getItem('binary-stash-token')
         } else {
-            token = TEST_TOKEN
+            this.token = TEST_TOKEN
         }
 
-        if (!token && !isBrowser) {
+        if (!this.token && !isBrowser) {
             throw new Error('Token is required')
         }
 
@@ -56,7 +58,7 @@ export class AuthenticationAPI {
             return {
                 headers: {
                     ...headers,
-                    authorization: 'token' ? `Bearer ${token}` : '',
+                    authorization: 'token' ? `Bearer ${this.token}` : '',
                 },
             }
         })
@@ -97,12 +99,20 @@ export class AuthenticationAPI {
         })
     }
 
+    private changeToken = (token: string) => {
+        this.token = token
+        this.generateClient(this.web_uri, this.cache!)
+        this.bootstrap()
+        console.log('Token changed, client:', this)
+    }
+
     private bootstrap() {
         this.queries = new AuthenticationQueries(this.client)
         this.mutations = new AuthenticationMutations({
             application_short_name: this.application_short_name,
             client: this.client,
-            cache: this.cache,
+            cache: this.cache!,
+            changeToken: this.changeToken.bind(this),
         })
     }
 }
