@@ -134,11 +134,8 @@ export class BinaryStashClient {
     }
 
     private changeToken(token: string) {
-        console.log('CHANGE_TOKEN_METHOD', token)
         this.token = token
-        console.log('BINARY_TOKEN', this.token)
         this.bootstrap()
-        console.log('BINARY STASH CLIENT', this)
     }
 
     private bootstrap() {

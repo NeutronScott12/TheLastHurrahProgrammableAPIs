@@ -1,6 +1,6 @@
 export * from './common/BinaryStashProvider'
-export * from './authentication/useBinaryMutations'
-export * from './authentication/useBinaryQueries'
+export * from './authentication/mutations/useBinaryMutations'
+export * from './authentication'
 export * from './comment/useCommentMutations'
 export * from './comment/useCommentQueries'
 
@@ -15,3 +15,11 @@ export {
     useDownVoteComment,
     useCommentVote,
 } from '@thelasthurrah/comment_api'
+
+export {
+    useLogin,
+    useRegister,
+    useChangePassword,
+    useForgotPasswword,
+    useTwoFactorLogin,
+} from '@thelasthurrah/authentication_api'
