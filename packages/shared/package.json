@@ -6,6 +6,9 @@
     "peerDependencies": {
         "react": "^16.8.0 || ^17.0.0 || ^18.0.0"
     },
+    "scripts": {
+        "graphql-codegen": "graphql-codegen --config codegen.yml"
+    },
     "devDependencies": {
         "@babel/core": "^7.18.9",
         "@babel/preset-env": "^7.18.9",

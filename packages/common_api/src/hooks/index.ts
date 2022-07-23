@@ -22,4 +22,6 @@ export {
     useChangePassword,
     useForgotPasswword,
     useTwoFactorLogin,
-} from '@thelasthurrah/authentication_api'
+} from './authentication/mutations'
+
+export { useCurrentUser } from './authentication/queries'

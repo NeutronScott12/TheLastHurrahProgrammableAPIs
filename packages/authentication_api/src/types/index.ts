@@ -3,6 +3,8 @@ import {
     InMemoryCache,
     NormalizedCacheObject,
 } from '@apollo/client'
+import { AuthenticationMutations } from '../mutation'
+import { AuthenticationQueries } from '../queries'
 
 export interface IAuthenticationAPI {
     application_short_name: string
@@ -18,14 +20,6 @@ export class BinaryStashClient {
     token: string
     cache: InMemoryCache
     client: ApolloClient<NormalizedCacheObject>
-    comment_queries: CommentQueries
-    comment_mutations: CommentMutations
     authentication_queries: AuthenticationQueries
     authentication_mutations: AuthenticationMutations
-    constructor({
-        http_uri,
-        ws_uri,
-        application_short_name,
-        cache,
-    }: IBinaryStashClientArgs)
 }
