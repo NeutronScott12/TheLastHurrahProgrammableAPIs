@@ -58,7 +58,7 @@ export class BinaryStashClient {
     }
 
     private generateClient() {
-        if (isBrowser && this.token === '') {
+        if (isBrowser) {
             this.token = localStorage.getItem('binary-stash-token') || ''
         } else {
             this.token = TEST_TOKEN
