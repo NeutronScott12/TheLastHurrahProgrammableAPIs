@@ -1,11 +1,8 @@
 import React, { useContext } from 'react'
 import { CommentQueries } from '@thelasthurrah/comment_api'
 
-import {
-    CommentAPIProvider,
-    IBinaryStashProvider,
-} from '../common/BinaryStashProvider'
-import { BinaryStashClient } from '../../BinaryStashClient'
+import { CommentAPIProvider } from '../../common/BinaryStashProvider'
+import { BinaryStashClient } from '../../../BinaryStashClient'
 
 export function useBinaryCommentQueries(): CommentQueries {
     const context = useContext(CommentAPIProvider) as BinaryStashClient
