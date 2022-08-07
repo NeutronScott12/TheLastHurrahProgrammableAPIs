@@ -94,6 +94,7 @@ fragment ThreadFragment on ThreadModel {
     application_id
     title
     website_url
+    thread_closed
     poll {
         ...PollFragment
     }

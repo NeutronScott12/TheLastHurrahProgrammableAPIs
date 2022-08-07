@@ -10,16 +10,12 @@
     },
     "dependencies": {
         "glob": "^8.0.3",
-        "lerna": "^5.2.0",
+        "lerna": "^5.3.0",
         "rimraf": "^3.0.2"
     },
     "workspaces": {
         "packages": [
             "packages/*"
-        ],
-        "nohoist": [
-            "@graphql-codegen/**",
-            "**graphql/**"
         ]
     },
     "devDependencies": {
