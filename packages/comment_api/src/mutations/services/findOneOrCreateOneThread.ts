@@ -1,4 +1,4 @@
-import { ApolloError } from '@apollo/client'
+import { ApolloError, ApolloQueryResult } from '@apollo/client'
 import {
     FindOneOrCreateOneThreadDocument,
     FindOneOrCreateOneThreadQuery,
@@ -13,7 +13,7 @@ export const findOneOrCreateOneThread = async (
     try {
         const { client } = global
 
-        return client.query<
+        return await client.query<
             FindOneOrCreateOneThreadQuery,
             FindOneOrCreateOneThreadQueryVariables
         >({
